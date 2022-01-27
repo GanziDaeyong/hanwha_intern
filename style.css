@@ -1,0 +1,11 @@
+#main_body {
+  width: 400px;
+  height: 400px;
+}
+
+#screen {
+  width: 350px;
+  height: 200px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
