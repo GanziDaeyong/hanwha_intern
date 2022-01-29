@@ -8,8 +8,10 @@
   <body id="main_body">
     <div id="_0201_div">
       <h1><strong>HOME</strong></h1>
-      <p>current account: NONE</p>
-      <p>current balance: NONE</p>
+      <p id="screen">
+        current account: NONE current balance: NONE
+        <button id="_balance">update</button>
+      </p>
       <p>
         <button id="_0201_button_account">account</button>
         <button id="_0201_button_send">send</button>
@@ -22,8 +24,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="./import/web3.js"></script>
     <script src="./import/ethereumjs-tx-1.3.3.js"></script>
+    <script src="./js/lib.js"></script>
+    <script src="./js/home.js"></script>
+
+    <script src="./js/helper.js"></script>
     <script src="./js/wallet.js"></script>
     <script src="./js/account.js"></script>
+    <script src="./js/test.js"></script>
     <script src="./pagesync.js"></script>
     <script src="./background.js"></script>
   </body>

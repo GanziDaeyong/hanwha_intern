@@ -4,7 +4,7 @@ $("#reset").click(function () {
   alert("CLEARED");
 });
 
-$("#_home").click(function () {
-  console.log("QQQQQQQQQQQQQQ");
-  _SendMsg("_0201");
-});
+// $("#_home").click(function () {
+//   console.log("QQQQQQQQQQQQQQ");
+//   _SendMsg("_0201");
+// });

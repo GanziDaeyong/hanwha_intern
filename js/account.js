@@ -39,6 +39,8 @@ function CreateAccount() {
 function LoadAccount(pk) {
   let newAccount = web3.eth.accounts.privateKeyToAccount(pk);
   let accountAddress = newAccount.address;
+  _PutStorage(newAccount, true); // to Curr
+
   let msg =
     "Account Loaded\n\n" +
     "Account Address: [" +
@@ -47,6 +49,7 @@ function LoadAccount(pk) {
     "Account Private Key: [" +
     pk +
     "]\n\n";
+
   return msg;
 }
 
