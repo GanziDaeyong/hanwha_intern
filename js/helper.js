@@ -45,7 +45,10 @@ function _PutStorage(accountObj, isFirst) {
   chrome.storage.sync.get(null, function (obj) {
     obj["currAcc"]["address"] = accountObj.address;
     if (isFirst) {
-      obj["currAcc"]["name"] = _GetTime() + "created account";
+      obj["currAcc"]["name"] = "AccountCreatedAt_"+_GetTime();
+    }
+    else{
+      obj["currAcc"]["name"] = "AccountLoadedAt_"+_GetTime();
     }
     console.log(obj);
     chrome.storage.sync.set(obj, function () {
@@ -60,11 +63,11 @@ async function _GetBalance(accountAddress) {
   return balance;
 }
 
-async function _GetAddress() {
+async function _GetCurr() {
   return new Promise((resolve, reject) => {
     try {
       chrome.storage.sync.get(null, function (res) {
-        resolve(res["currAcc"]["address"]);
+        resolve(res["currAcc"]);
       });
     } catch (ex) {
       reject(ex);
@@ -86,8 +89,6 @@ async function _GetAddress() {
 function _GetTime() {
   var today = new Date();
   var date =
-    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-  var time = today.getHours() + ":" + today.getMinutes();
-  var dateTime = date + " " + time;
-  return dateTime;
+    today.getFullYear()+""+(today.getMonth() + 1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes();
+  return date;
 }

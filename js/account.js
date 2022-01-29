@@ -11,26 +11,34 @@ $("#_0301_button_create").click(function () {
 
 $("#_0301_button_load").click(function () {
   // _PutStorage(); // test
-
   _SendMsg("_0303");
 });
-
 $("#_0303_button_enter").click(function () {
   let pk = $("#_0303_input_pk").val();
   let screenMsg = LoadAccount(pk);
   _SendMsg("_0303_2", screenMsg);
 });
 
-function CreateAccount() {
-  let account = web3.eth.accounts.create();
+$("#_0301_button_name").click(function(){
+  _SendMsg("_0306");
+})
 
+$("#_0306_button_enter").click(function(){
+  let name = $("#_0306_input_name").val();
+  ChangeName(name);
+})
+
+function CreateAccount() {
+  let newAccount = web3.eth.accounts.create();
+  _PutStorage(newAccount, true); // to Curr
+  console.log("aa");
   let msg =
     "Account Created\n\n" +
     "Account Address: [" +
-    account.address +
+    newAccount.address +
     "]\n\n" +
     "Account Private Key: [" +
-    account.privateKey +
+    newAccount.privateKey +
     "]\n\n";
 
   return msg;
@@ -39,7 +47,7 @@ function CreateAccount() {
 function LoadAccount(pk) {
   let newAccount = web3.eth.accounts.privateKeyToAccount(pk);
   let accountAddress = newAccount.address;
-  _PutStorage(newAccount, true); // to Curr
+  _PutStorage(newAccount, false); // to Curr
 
   let msg =
     "Account Loaded\n\n" +
@@ -53,13 +61,11 @@ function LoadAccount(pk) {
   return msg;
 }
 
-// obj.address
-// obj.privateKey
-
-// let struct = {
-//   currAcc: oneAcc,
-//   accList: accList,
-//   walletpw: walletPassword,
-//   tnm: tokenNameMapper,
-//   txbuf: transactionBuffer,
-// };
+function ChangeName(name) {
+  chrome.storage.sync.get(null, function (obj) {
+    obj["currAcc"]["name"] = name;
+    chrome.storage.sync.set(obj, function () {
+      alert("Name Changed");
+    });
+  });
+}

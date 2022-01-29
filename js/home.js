@@ -14,13 +14,12 @@ $("#_balance").click(function () {
 });
 
 async function GoHome() {
-  const address = await _GetAddress();
-  let bal;
-  let msg = "current account:\nbalance: ";
-
+  const curr = await _GetCurr();
+  const address = curr["address"]
+  const name = curr["name"] 
   _GetBalance(address).then((result) => {
     bal = result;
-    msg = msg + bal + address;
+    let msg = "current account: " +  name + "\ncurrent address: "+address+"\ncurrent balance: "+bal;
     _SendMsg("_0201", msg);
   });
 }
