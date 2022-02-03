@@ -28,8 +28,15 @@ $("#_0306_button_enter").click(function(){
   ChangeName(name);
 })
 
+$("#_0301_button_transition").click(function(){
+  _SendMsg("")
+
+
+})
+
 function CreateAccount() {
   let newAccount = web3.eth.accounts.create();
+  // TODO: 여기 Web3.js의 wallet 기능과 연결할지 clarify 하기
   _PutStorage(newAccount, true); // to Curr
   console.log("aa");
   let msg =
@@ -47,6 +54,7 @@ function CreateAccount() {
 function LoadAccount(pk) {
   let newAccount = web3.eth.accounts.privateKeyToAccount(pk);
   let accountAddress = newAccount.address;
+  // TODO: 이미 지갑에 있는 계정이라면 invalid하게
   _PutStorage(newAccount, false); // to Curr
 
   let msg =
@@ -63,9 +71,12 @@ function LoadAccount(pk) {
 
 function ChangeName(name) {
   chrome.storage.sync.get(null, function (obj) {
-    obj["currAcc"]["name"] = name;
+    const idx = obj["currAcc"]
+    obj["accList"][idx]["name"] = name;
+
     chrome.storage.sync.set(obj, function () {
       alert("Name Changed");
+      console.log(obj);
     });
   });
 }

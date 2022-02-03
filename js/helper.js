@@ -8,9 +8,23 @@ function _SendMsg(msg, src) {
 }
 
 function _StorageStruct(pw) {
+
+  let struct = {
+    currAcc: -1,
+    accList: [],
+    walletpw: pw,
+    tnm: {},
+    txbuf: [],
+  };
+
+  return struct;
+}
+
+function _CreateAccountRecord(name, address){
+
   let oneAcc = {
-    name: "No Account Created",
-    address: "No Account Created",
+    name: name,
+    address: address,
     balance: {
       eth: 0,
     },
@@ -20,39 +34,59 @@ function _StorageStruct(pw) {
       receiver: "default",
     },
   };
-
-  let accList = [oneAcc];
-
-  let walletPassword = pw;
-
-  let tokenNameMapper = {};
-
-  let transactionBuffer = [];
-
-  let struct = {
-    currAcc: oneAcc,
-    accList: accList,
-    walletpw: walletPassword,
-    tnm: tokenNameMapper,
-    txbuf: transactionBuffer,
-  };
-
-  return struct;
+  return oneAcc;
 }
+
+function _CheckDuplicate(address){
+
+
+
+}
+
+/*
+function _PutStorage(accountObj, isFirst) {
+  console.log("putstorage came in");
+  chrome.storage.sync.get(null, function (obj) {
+
+    let name = "";
+    if (isFirst) name = "AccountCreatedAt_"+_GetTime();
+    else name = "AccountLoadedAt_"+_GetTime();
+
+    const address = accountObj.address;
+
+    obj["currAcc"]["address"] = address;
+    obj["currAcc"]["name"] = name;
+    
+    console.log(obj);
+
+    let idx = obj["accList"].length
+    let toPush = _CreateAccountRecord(name, address)
+    obj["accList"].push(toPush);
+
+    chrome.storage.sync.set(obj, function () {
+      console.log("Saved");
+      console.log(obj);
+    });
+  });
+}
+*/
 
 function _PutStorage(accountObj, isFirst) {
   console.log("putstorage came in");
   chrome.storage.sync.get(null, function (obj) {
-    obj["currAcc"]["address"] = accountObj.address;
-    if (isFirst) {
-      obj["currAcc"]["name"] = "AccountCreatedAt_"+_GetTime();
-    }
-    else{
-      obj["currAcc"]["name"] = "AccountLoadedAt_"+_GetTime();
-    }
-    console.log(obj);
+
+    let name = "";
+    if (isFirst) name = "AccountCreatedAt_"+_GetTime();
+    else name = "AccountLoadedAt_"+_GetTime();
+    const address = accountObj.address;
+
+    let toPush = _CreateAccountRecord(name, address)
+    obj["accList"].push(toPush);
+    obj["currAcc"]=(obj["accList"].length)-1;
+
     chrome.storage.sync.set(obj, function () {
       console.log("Saved");
+      console.log(obj);
     });
   });
 }
@@ -67,13 +101,27 @@ async function _GetCurr() {
   return new Promise((resolve, reject) => {
     try {
       chrome.storage.sync.get(null, function (res) {
-        resolve(res["currAcc"]);
+        let idx = res["currAcc"];
+        resolve(res["accList"][idx]);
       });
     } catch (ex) {
       reject(ex);
     }
   });
 }
+
+async function _GetList() {
+  return new Promise((resolve, reject) => {
+    try {
+      chrome.storage.sync.get(null, function (res) {
+        resolve(res["accList"]);
+      });
+    } catch (ex) {
+      reject(ex);
+    }
+  });
+}
+
 
 // function _GetAddress() {
 //   let add;
