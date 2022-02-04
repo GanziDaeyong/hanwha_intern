@@ -3,12 +3,12 @@ function _SendMsg(msg, src) {
     msg: msg,
     data: {
       screen: src,
+      option: src,
     },
   });
 }
 
 function _StorageStruct(pw) {
-
   let struct = {
     currAcc: -1,
     accList: [],
@@ -20,8 +20,7 @@ function _StorageStruct(pw) {
   return struct;
 }
 
-function _CreateAccountRecord(name, address){
-
+function _CreateAccountRecord(name, address) {
   let oneAcc = {
     name: name,
     address: address,
@@ -37,11 +36,7 @@ function _CreateAccountRecord(name, address){
   return oneAcc;
 }
 
-function _CheckDuplicate(address){
-
-
-
-}
+function _CheckDuplicate(address) {}
 
 /*
 function _PutStorage(accountObj, isFirst) {
@@ -74,15 +69,14 @@ function _PutStorage(accountObj, isFirst) {
 function _PutStorage(accountObj, isFirst) {
   console.log("putstorage came in");
   chrome.storage.sync.get(null, function (obj) {
-
     let name = "";
-    if (isFirst) name = "AccountCreatedAt_"+_GetTime();
-    else name = "AccountLoadedAt_"+_GetTime();
+    if (isFirst) name = "AccountCreatedAt_" + _GetTime();
+    else name = "AccountLoadedAt_" + _GetTime();
     const address = accountObj.address;
 
-    let toPush = _CreateAccountRecord(name, address)
+    let toPush = _CreateAccountRecord(name, address);
     obj["accList"].push(toPush);
-    obj["currAcc"]=(obj["accList"].length)-1;
+    obj["currAcc"] = obj["accList"].length - 1;
 
     chrome.storage.sync.set(obj, function () {
       console.log("Saved");
@@ -122,6 +116,17 @@ async function _GetList() {
   });
 }
 
+async function _GetWalletPW() {
+  return new Promise((resolve, reject) => {
+    try {
+      chrome.storage.sync.get(null, function (res) {
+        resolve(res["walletpw"]);
+      });
+    } catch (ex) {
+      reject(ex);
+    }
+  });
+}
 
 // function _GetAddress() {
 //   let add;
@@ -137,6 +142,22 @@ async function _GetList() {
 function _GetTime() {
   var today = new Date();
   var date =
-    today.getFullYear()+""+(today.getMonth() + 1)+""+today.getDate()+""+today.getHours()+""+today.getMinutes();
+    today.getFullYear() +
+    "" +
+    (today.getMonth() + 1) +
+    "" +
+    today.getDate() +
+    "" +
+    today.getHours() +
+    "" +
+    today.getMinutes();
   return date;
+}
+
+function _SaveWalletWeb3js() {
+  chrome.storage.sync.get(null, function (obj) {
+    pw = obj["walletpw"];
+    web3.eth.accounts.wallet.save(pw);
+    console.log("created/loaded account was saved");
+  });
 }

@@ -9,12 +9,15 @@ let cont = "default";
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.msg === "syncpage") {
     SyncView();
+  } else if (request.msg === "_0304") {
+    ChangeViewWithSelect(request.msg, request.data);
+    console.log("TESTETS");
   } else {
-    ChangeView(request.msg, request.data);
+    ChangeViewWithScreen(request.msg, request.data);
   }
 });
 
-function ChangeView(msg, data) {
+function ChangeViewWithScreen(msg, data) {
   let views = chrome.extension.getViews({
     type: "popup",
   });
@@ -30,6 +33,22 @@ function ChangeView(msg, data) {
 
   console.log("CHANGEVIEW");
   console.log(cont);
+}
+
+function ChangeViewWithSelect(msg, data) {
+  let views = chrome.extension.getViews({
+    type: "popup",
+  });
+  console.log(data["option"]);
+
+  views[0].document.write(readTextFile(msg));
+  views[0].document.close();
+  // console.log(
+  //   views[0].document.getElementById("_0304_select_transition").innerHTML
+  // );
+  views[0].document.getElementById("_0304_select_transition").innerHTML =
+    data["option"];
+  cont = views[0].document.documentElement.outerHTML;
 }
 
 function SyncView() {

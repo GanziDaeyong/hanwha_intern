@@ -19,26 +19,41 @@ $("#_0303_button_enter").click(function () {
   _SendMsg("_0303_2", screenMsg);
 });
 
-$("#_0301_button_name").click(function(){
-  _SendMsg("_0306");
-})
+$("#_0301_button_transition").click(function () {
+  AddOptions();
+});
 
-$("#_0306_button_enter").click(function(){
+$("#_0304_button_enter").click(function () {
+  let accIdx = $("#_0304_select_transition option:selected").val();
+  AccountTransition(accIdx);
+  alert("Account Transition Succeeded");
+});
+
+$("#_0301_button_detail").click(function () {
+  _SendMsg("_0305");
+});
+
+$("#_0305_button_enter").click(function () {
+  const pw = $("#_0305_input_pw").val();
+  AccountDetail(pw);
+});
+
+$("#_0301_button_name").click(function () {
+  _SendMsg("_0306");
+});
+
+$("#_0306_button_enter").click(function () {
   let name = $("#_0306_input_name").val();
   ChangeName(name);
-})
-
-$("#_0301_button_transition").click(function(){
-  _SendMsg("")
-
-
-})
+});
 
 function CreateAccount() {
-  let newAccount = web3.eth.accounts.create();
-  // TODO: 여기 Web3.js의 wallet 기능과 연결할지 clarify 하기
+  let createAccount = web3.eth.accounts.create(); // account obj
+  let newAccount = web3.eth.accounts.wallet.add(createAccount);
+  _SaveWalletWeb3js();
   _PutStorage(newAccount, true); // to Curr
-  console.log("aa");
+  // console.log("aa");
+  console.log(web3.eth.accounts.wallet.load("123"));
   let msg =
     "Account Created\n\n" +
     "Account Address: [" +
@@ -52,8 +67,10 @@ function CreateAccount() {
 }
 
 function LoadAccount(pk) {
-  let newAccount = web3.eth.accounts.privateKeyToAccount(pk);
+  let loadAccount = web3.eth.accounts.privateKeyToAccount(pk); // account obj
+  let newAccount = web3.eth.accounts.wallet.add(loadAccount);
   let accountAddress = newAccount.address;
+  // _SaveWalletWeb3js();
   // TODO: 이미 지갑에 있는 계정이라면 invalid하게
   _PutStorage(newAccount, false); // to Curr
 
@@ -71,12 +88,60 @@ function LoadAccount(pk) {
 
 function ChangeName(name) {
   chrome.storage.sync.get(null, function (obj) {
-    const idx = obj["currAcc"]
+    const idx = obj["currAcc"];
     obj["accList"][idx]["name"] = name;
 
     chrome.storage.sync.set(obj, function () {
       alert("Name Changed");
       console.log(obj);
     });
+  });
+}
+
+async function AddOptions() {
+  let accList = await _GetList();
+  let options = "";
+  for (let i = 0; i < accList.length; i++) {
+    options += "<option value=" + i + ">" + accList[i]["name"] + "</option>";
+    // $("#_0304_select_transition").append(selectOptions);
+    // https://24hours-beginner.tistory.com/98
+  }
+  console.log(options);
+  _SendMsg("_0304", options);
+}
+
+function AccountTransition(idx) {
+  chrome.storage.sync.get(null, function (obj) {
+    obj["currAcc"] = idx;
+    chrome.storage.sync.set(obj, function () {
+      console.log("Saved");
+      console.log(obj);
+    });
+  });
+}
+
+// TODO: Login Validtion -> modulify
+function AccountDetail(pw) {
+  chrome.storage.sync.get(null, function (obj) {
+    if (obj["walletpw"] == pw) {
+      let walletobj = web3.eth.accounts.wallet.load(pw);
+      console.log(walletobj);
+      let currIdx = obj["currAcc"];
+      let currAddress = obj["accList"][currIdx]["address"];
+      let currName = obj["accList"][currIdx]["name"];
+      let currPK = walletobj[currAddress].privateKey;
+      let msg =
+        "Name\n[" +
+        currName +
+        "]\n\nAddress\n[" +
+        currAddress +
+        "]\n\nPrivate Key\n[" +
+        currPK +
+        "]";
+
+      _SendMsg("_0305_2", msg);
+    } else {
+      alert("invalid password");
+    }
   });
 }

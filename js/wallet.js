@@ -39,7 +39,8 @@ function LoadWallet(pw) {
   chrome.storage.sync.get(null, function (res) {
     if (res["walletpw"] != undefined && res["walletpw"] == pw) {
       console.log("[INFO] Login Succeeded");
-      _SendMsg("_0201");
+      // _SendMsg("_0201");
+      GoHome();
     } else {
       alert("invalid password");
       console.log("[INFO] Login Failed. Wrong PW");

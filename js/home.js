@@ -1,6 +1,5 @@
 // Goto Home page
 $("#_home").click(function () {
-  console.log("QQQQQQQQQQQQQQ");
   GoHome();
 });
 
@@ -12,14 +11,20 @@ $("#_balance").click(function () {
   //   //   let add = "0x5CCE38322F190EAB8Abc7Ceb23E816Cf7d3b48DC";
   //   let bal;
 });
-
+// TODO: No Account Created & Go Home stucks
 async function GoHome() {
   const curr = await _GetCurr();
-  const address = curr["address"]
-  const name = curr["name"] 
+  const address = curr["address"];
+  const name = curr["name"];
   _GetBalance(address).then((result) => {
     bal = result;
-    let msg = "current account: " +  name + "\ncurrent address: "+address+"\ncurrent balance: "+bal;
+    let msg =
+      "current account: " +
+      name +
+      "\ncurrent address: " +
+      address +
+      "\ncurrent balance: " +
+      bal;
     _SendMsg("_0201", msg);
   });
 }
