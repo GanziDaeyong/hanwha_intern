@@ -53,7 +53,6 @@ function CreateAccount() {
   _SaveWalletWeb3js();
   _PutStorage(newAccount, true); // to Curr
   // console.log("aa");
-  console.log(web3.eth.accounts.wallet.load("123"));
   let msg =
     "Account Created\n\n" +
     "Account Address: [" +
@@ -69,8 +68,8 @@ function CreateAccount() {
 function LoadAccount(pk) {
   let loadAccount = web3.eth.accounts.privateKeyToAccount(pk); // account obj
   let newAccount = web3.eth.accounts.wallet.add(loadAccount);
-  let accountAddress = newAccount.address;
   // _SaveWalletWeb3js();
+  let accountAddress = newAccount.address;
   // TODO: 이미 지갑에 있는 계정이라면 invalid하게
   _PutStorage(newAccount, false); // to Curr
 

@@ -27,11 +27,7 @@ function _CreateAccountRecord(name, address) {
     balance: {
       eth: 0,
     },
-    history: {
-      type: "default",
-      amount: 0,
-      receiver: "default",
-    },
+    history: [],
   };
   return oneAcc;
 }
@@ -157,7 +153,34 @@ function _GetTime() {
 function _SaveWalletWeb3js() {
   chrome.storage.sync.get(null, function (obj) {
     pw = obj["walletpw"];
+    // console.log("THISISBEFORE");
+    console.log(web3.eth.accounts.wallet.load(pw));
     web3.eth.accounts.wallet.save(pw);
+    console.log("THISISAFTER");
+    console.log(web3.eth.accounts.wallet.load(pw));
+
     console.log("created/loaded account was saved");
+  });
+}
+
+function _TxBufferStruct(txType, currencyType, txHash, to, amount) {
+  let txRecord = {
+    txStatus: -1, // -1 Pending   0 Rejected    1 Accepted
+    txType: txType,
+    currencyType: currencyType,
+    txHash: txHash,
+    to: to,
+    amount: amount,
+  };
+  return txRecord;
+}
+
+function _TxBufferPush(txbufferstruct) {
+  chrome.storage.sync.get(null, function (obj) {
+    obj["txbuf"].push(txbufferstruct);
+    chrome.storage.sync.set(obj, function () {
+      console.log("Saved");
+      console.log(obj);
+    });
   });
 }
