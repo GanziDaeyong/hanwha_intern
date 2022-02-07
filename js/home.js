@@ -16,6 +16,8 @@ async function GoHome() {
   const curr = await _GetCurr();
   const address = curr["address"];
   const name = curr["name"];
+  CheckTxBuffer();
+
   _GetBalance(address).then((result) => {
     bal = result;
     let msg =

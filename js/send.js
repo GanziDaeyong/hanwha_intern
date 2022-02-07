@@ -111,6 +111,7 @@ async function SendTx() {
       console.log(txHash);
       alert("Transaction Sent");
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
+      const time = _GetTimeSec();
       let msg =
         "transaction hash\n[" +
         txHash +
@@ -118,7 +119,15 @@ async function SendTx() {
         toEtherscan +
         "]";
       _SendMsg("_0402_2", msg);
-      const txObj = _TxBufferStruct("send", "ether", txHash, toAddress, amount);
+      const txObj = _TxBufferStruct(
+        "send",
+        "ether",
+        txHash,
+        fromAddress,
+        toAddress,
+        amount,
+        time
+      );
       _TxBufferPush(txObj);
     });
   });

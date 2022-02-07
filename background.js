@@ -4,7 +4,12 @@
 	팝업창의 dom을 변환한다.
 */
 
-let cont = "default";
+try {
+  let cont = "default";
+} catch (ex) {
+  console.log("to console");
+}
+// let cont = "default";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.msg === "syncpage") {

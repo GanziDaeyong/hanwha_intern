@@ -87,12 +87,37 @@ async function _GetBalance(accountAddress) {
   return balance;
 }
 
+async function _CheckTxStatus(txHash) {
+  const status = await web3.eth.getTransactionReceipt(txHash);
+  let res;
+  try {
+    res = status.status; // TODO: Null exception
+    if (res == true) res = 1;
+    if (res == false) res = 0;
+  } catch (ex) {
+    res = -1;
+  }
+  return res;
+}
+
 async function _GetCurr() {
   return new Promise((resolve, reject) => {
     try {
       chrome.storage.sync.get(null, function (res) {
         let idx = res["currAcc"];
         resolve(res["accList"][idx]);
+      });
+    } catch (ex) {
+      reject(ex);
+    }
+  });
+}
+
+async function _GetAll() {
+  return new Promise((resolve, reject) => {
+    try {
+      chrome.storage.sync.get(null, function (res) {
+        resolve(res);
       });
     } catch (ex) {
       reject(ex);
@@ -153,24 +178,24 @@ function _GetTime() {
 function _SaveWalletWeb3js() {
   chrome.storage.sync.get(null, function (obj) {
     pw = obj["walletpw"];
-    // console.log("THISISBEFORE");
-    console.log(web3.eth.accounts.wallet.load(pw));
+    web3.eth.accounts.wallet.load(pw); // [CAUTION] SHOULD BE LOADED RIGHT BEFORE SAVING
     web3.eth.accounts.wallet.save(pw);
-    console.log("THISISAFTER");
     console.log(web3.eth.accounts.wallet.load(pw));
 
     console.log("created/loaded account was saved");
   });
 }
 
-function _TxBufferStruct(txType, currencyType, txHash, to, amount) {
+function _TxBufferStruct(txType, currencyType, txHash, from, to, amount, time) {
   let txRecord = {
     txStatus: -1, // -1 Pending   0 Rejected    1 Accepted
     txType: txType,
     currencyType: currencyType,
     txHash: txHash,
+    from: from,
     to: to,
     amount: amount,
+    time: time,
   };
   return txRecord;
 }
@@ -183,4 +208,14 @@ function _TxBufferPush(txbufferstruct) {
       console.log(obj);
     });
   });
+}
+
+function _GetTimeSec() {
+  var today = new Date();
+  var date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  var time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date + " " + time;
+  return dateTime;
 }

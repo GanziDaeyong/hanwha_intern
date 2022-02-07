@@ -68,7 +68,7 @@ function CreateAccount() {
 function LoadAccount(pk) {
   let loadAccount = web3.eth.accounts.privateKeyToAccount(pk); // account obj
   let newAccount = web3.eth.accounts.wallet.add(loadAccount);
-  // _SaveWalletWeb3js();
+  _SaveWalletWeb3js();
   let accountAddress = newAccount.address;
   // TODO: 이미 지갑에 있는 계정이라면 invalid하게
   _PutStorage(newAccount, false); // to Curr
