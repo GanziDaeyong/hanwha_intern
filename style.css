@@ -4,8 +4,8 @@
 }
 
 #screen {
-  width: 350px;
-  height: 200px;
+  width: 380px;
+  height: 300px;
   overflow: auto;
   word-wrap: break-word;
 }

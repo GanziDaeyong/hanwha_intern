@@ -104,6 +104,7 @@ async function _GetCurr() {
   return new Promise((resolve, reject) => {
     try {
       chrome.storage.sync.get(null, function (res) {
+        // console.log(res);
         let idx = res["currAcc"];
         resolve(res["accList"][idx]);
       });
@@ -187,6 +188,7 @@ function _SaveWalletWeb3js() {
 }
 
 function _TxBufferStruct(txType, currencyType, txHash, from, to, amount, time) {
+  console.log("instruct -> " + amount);
   let txRecord = {
     txStatus: -1, // -1 Pending   0 Rejected    1 Accepted
     txType: txType,

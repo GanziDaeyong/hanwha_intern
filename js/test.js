@@ -7,17 +7,29 @@ $("#reset").click(function () {
 $("#test").click(function () {
   console.log("gogo");
   // f_deploy_sc();
-  // GetBytecode("sooong", "sgt", 3000000000000);
+  // GetBytecode("sooong", "sgt", 3e18);
   // tokbal();
-  sendTok();
-  // _SendMsg("_0601");
+  // sendTok();
+  _SendMsg("_0601");
 });
 
 $("#_0601_button_create").click(function () {
   _SendMsg("_0602");
 });
 
-async function GetBytecode(name, sym, totalsupply) {
+$("#_0602_button_create").click(function () {
+  const name = $("#_0602_input_name").val();
+  const sym = $("#_0602_input_symbol").val();
+  let totalsupply = $("#_0602_input_totalsupply").val();
+  totalsupply *= 1e18;
+  GetBytecodeAndDeploy(name, sym, totalsupply);
+});
+
+async function GetBytecodeAndDeploy(name, sym, totalsupply) {
+  alert(
+    "Token Contract is being processed.\nThis might take upto 3 minutes.\nPlease check Log for further information."
+  );
+
   const l = "http://localhost:8080/api/v1/createtoken";
 
   const response1 = await fetch(
@@ -31,13 +43,11 @@ async function GetBytecode(name, sym, totalsupply) {
   const result1 = await response1.json();
   const bytecode = result1["bytecode"];
   console.log(result1);
-  // let bytecode = ; // test
-  const t = f_deploy_sc(bytecode);
+  _Deployer(bytecode, name, sym, totalsupply);
 }
 
-async function f_deploy_sc(bytecode) {
+async function _Deployer(bytecode, name, sym, totalsupply) {
   // TODO: Write
-  console.log("Begin deployment");
 
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
@@ -51,15 +61,12 @@ async function f_deploy_sc(bytecode) {
   const privateKey = Buffer.from(pk, "hex");
   const data = "0x" + bytecode;
 
-  console.log("Begin deployment2");
-
   // let gasPrice = await _GetAvgGasPrice();
   // gasPrice = web3.utils.fromWei(gasPrice, "ether"); // toether
   // let block = await web3.eth.getBlock("latest");
   // let gasLimit = block.gasLimit / block.transactions.length;
   // gasLimit = parseInt(gasLimit) + 100000;
   // console.log(gasLimit);
-  console.log("Begin deployment3");
 
   web3.eth.getTransactionCount(fromAddress, (err, txCount) => {
     const txObject = {
@@ -75,51 +82,70 @@ async function f_deploy_sc(bytecode) {
     tx.sign(privateKey);
     const serializedTx = tx.serialize();
     const raw = "0x" + serializedTx.toString("hex");
+
     web3.eth.sendSignedTransaction(raw, (err, txHash) => {
       console.log(err);
       console.log(txHash);
+      const currency = name + "(" + sym + ")";
+      const time = _GetTimeSec();
+      const txRecord = _TxBufferStruct(
+        "Token Creation",
+        currency,
+        txHash,
+        fromAddress,
+        "null",
+        totalsupply * 1e-18,
+        time
+      );
+      _TxBufferPush(txRecord);
     });
   });
 }
 
-function sendTok() {
-  // let abi = require("human-standard-token-abi");
-  // console.log(abi);
+async function sendTok() {
+  const curr = await _GetCurr();
+  const fromAddress = curr["address"];
+  const toAddress = "0x5CCE38322F190EAB8Abc7Ceb23E816Cf7d3b48DC";
 
-  console.log(abi);
+  const pw = await _GetWalletPW();
+  const walletobj = web3.eth.accounts.wallet.load(pw);
+  let pk = walletobj[fromAddress].privateKey;
+  pk = pk.substring(2);
+  console.log(pk);
+
+  const privateKey = Buffer.from(pk, "hex");
+
+  const abiArray = abi;
+  const contractAddress = "0x71b217e399E3f2ac330a994D3bD68AE9731a7aF2";
+  const contract = new web3.eth.Contract(abiArray, contractAddress, {
+    from: fromAddress,
+  });
+  const count = await web3.eth.getTransactionCount(fromAddress);
+
+  const gasLimit = web3.utils.toHex(100000); // Raise the gas limit to a much higher amount
+  const gasPrice = web3.utils.toHex(web3.utils.toWei("50", "gwei")); // 얘를 가져와서 쓰기
+
+  const txObject = {
+    from: fromAddress,
+    nonce: web3.utils.toHex(count),
+    gasPrice: gasPrice,
+    gasLimit: gasLimit,
+    to: contractAddress,
+    value: "0x0",
+    data: contract.methods.transfer(toAddress, 1).encodeABI(),
+    // data: contract.transfer.getData(toAddress, 0.01, { from: fromAddress }),
+    chainId: 0x03,
+  };
+
+  const tx = new ethereumjs.Tx(txObject, { chain: "ropsten" });
+  tx.sign(privateKey);
+  const serializedTx = tx.serialize();
+  const raw = "0x" + serializedTx.toString("hex");
+  web3.eth.sendSignedTransaction(raw, (err, txHash) => {
+    console.log(err);
+    console.log(txHash);
+  });
 }
-
-// send token
-/*
-
-var count = web3.eth.getTransactionCount("0x26...");
-var abiArray = JSON.parse(fs.readFileSync('mycoin.json', 'utf-8'));
-var contractAddress = "0x8...";
-var contract = web3.eth.contract(abiArray).at(contractAddress);
-var rawTransaction = {
-    "from": "0x26...",
-    "nonce": web3.toHex(count),
-    "gasPrice": "0x04e3b29200",
-    "gasLimit": "0x7458",
-    "to": contractAddress,
-    "value": "0x0",
-    "data": contract.transfer.getData("0xCb...", 10, {from: "0x26..."}),
-    "chainId": 0x03
-};
-
-var privKey = new Buffer('fc3...', 'hex');
-var tx = new Tx(rawTransaction);
-
-tx.sign(privKey);
-var serializedTx = tx.serialize();
-
-web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-    if (!err)
-        console.log(hash);
-    else
-        console.log(err);
-});
-*/
 
 /* get token balance */
 async function tokbal() {
