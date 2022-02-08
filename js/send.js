@@ -118,7 +118,6 @@ async function SendTx() {
         "]\n\nurl to etherscan\n[" +
         toEtherscan +
         "]";
-      _SendMsg("_0402_2", msg);
       const txObj = _TxBufferStruct(
         "send",
         "ether",
@@ -129,6 +128,7 @@ async function SendTx() {
         time
       );
       _TxBufferPush(txObj);
+      _SendMsg("_0402_2", msg);
     });
   });
 }

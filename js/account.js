@@ -66,6 +66,7 @@ function CreateAccount() {
 }
 
 function LoadAccount(pk) {
+  // TODO: 예외처리 / pk의 validity 확인필요하다.
   let loadAccount = web3.eth.accounts.privateKeyToAccount(pk); // account obj
   let newAccount = web3.eth.accounts.wallet.add(loadAccount);
   _SaveWalletWeb3js();

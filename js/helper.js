@@ -24,9 +24,7 @@ function _CreateAccountRecord(name, address) {
   let oneAcc = {
     name: name,
     address: address,
-    balance: {
-      eth: 0,
-    },
+    balance: [],
     history: [],
   };
   return oneAcc;
@@ -81,10 +79,27 @@ function _PutStorage(accountObj, isFirst) {
   });
 }
 
+async function _GetBalance_EtherAndToken(accountAddress) {
+  let res = "";
+
+  const getbalance = await web3.eth.getBalance(accountAddress);
+  const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
+  res += "eth: " + ethBal + "\n";
+
+  const curr = await _GetCurr();
+  const tokList = curr["balance"];
+
+  for (let eachTokList of tokList) {
+    res += eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
+    res += "\n";
+  }
+
+  return res;
+}
 async function _GetBalance(accountAddress) {
-  let getbalance = await web3.eth.getBalance(accountAddress);
-  let balance = String(web3.utils.fromWei(getbalance, "ether"));
-  return balance;
+  const getbalance = await web3.eth.getBalance(accountAddress);
+  const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
+  return ethBal;
 }
 
 async function _CheckTxStatus(txHash) {

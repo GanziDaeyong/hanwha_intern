@@ -16,17 +16,17 @@ async function GoHome() {
   const curr = await _GetCurr();
   const address = curr["address"];
   const name = curr["name"];
+
   CheckTxBuffer();
 
-  _GetBalance(address).then((result) => {
-    bal = result;
+  _GetBalance_EtherAndToken(address).then((result) => {
     let msg =
       "current account: " +
       name +
       "\ncurrent address: " +
       address +
-      "\ncurrent balance: " +
-      bal;
+      "\ncurrent balance:\n" +
+      result;
     _SendMsg("_0201", msg);
   });
 }
