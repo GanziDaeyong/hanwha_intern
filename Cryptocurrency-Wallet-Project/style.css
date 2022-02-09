@@ -1,0 +1,12 @@
+#main_body {
+  width: 400px;
+  height: 400px;
+  font-family: "Roboto", "Noto Sans KR", sans-serif;
+}
+
+#screen {
+  width: 380px;
+  height: 300px;
+  overflow: auto;
+  word-wrap: break-word;
+}
