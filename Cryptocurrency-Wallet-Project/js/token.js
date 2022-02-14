@@ -27,7 +27,13 @@ $("#_0603_button_load").click(function () {
   LoadToken(tokenAddress);
 });
 
+$("#_0601_button_autoload").click(function () {
+  _GetTokenFromServer();
+});
 
+$("#_0604_button_load").click(function () {
+  _AutoLoad();
+});
 
 async function ValidateTokenCreateInfo(name, sym, totalsupply) {
   if (name == "" || sym == "" || totalsupply <= 0.0) {
@@ -74,8 +80,10 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
 }
 
 async function GetBytecodeAndDeploy() {
+  Loading();
+
   alert(
-    "Token Contract is being processed.\nThis might take upto 3 minutes.\nPlease check Log for further information."
+    "Token Contract is being processed.\nThis might take upto 30 seconds.\nPlease check Log for further information."
   );
 
   let text = $("#screen").text();
@@ -91,6 +99,8 @@ async function GetBytecodeAndDeploy() {
 
   totalsupply *= 1e18;
 
+  // Loading();
+
   const TokenCompileServer = "http://localhost:8080/api/v1/createtoken";
   // "http://115.85.181.243:8080/api/v1/createtoken"
 
@@ -100,7 +110,9 @@ async function GetBytecodeAndDeploy() {
   });
   const result1 = await response1.json();
   const bytecode = result1["bytecode"];
-  console.log(result1);
+
+  UnLoading();
+
   _Deployer(bytecode, name, sym, totalsupply);
 }
 
@@ -230,6 +242,8 @@ async function LoadToken(tokenAddress) {
 }
 
 async function UpdateTokenBalance(zeroforgohome) {
+  Loading();
+
   const minABI = [
     // balanceOf
     {
@@ -260,6 +274,7 @@ async function UpdateTokenBalance(zeroforgohome) {
     }
     chrome.storage.sync.set(obj, function () {
       console.log(obj);
+      UnLoading();
       if (zeroforgohome == 0) {
         GoHome();
       }
@@ -273,6 +288,7 @@ async function LoadToken(tokenAddress) {
   // dyt 0x30354b1a08b628dc98d185d3d3364009206e2379
   // aat 0x37f93c7790249901B80B9e1517Af2879e0a98458
   //   const tokenAddress = "0x37f93c7790249901B80B9e1517Af2879e0a98458";
+  Loading();
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
 
@@ -332,7 +348,67 @@ async function LoadToken(tokenAddress) {
         "]\nbalance [" +
         balance +
         "]";
+      UnLoading();
       _SendMsg("_0603_2", msg);
+    });
+  });
+}
+
+async function _GetTokenFromServer() {
+  Loading();
+  const curr = await _GetCurr();
+  const fromAddress = curr["address"];
+
+  const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  const response = await fetch(CrawlingServerUrl);
+
+  const result = await response.json();
+  console.log(result);
+  // let msg = result;
+  let msg = "";
+  for (let i = 0; i < result["tokens"]["name"].length; i++) {
+    const comb =
+      result["tokens"]["name"][i] +
+      " (" +
+      result["tokens"]["sym"][i] +
+      ") : " +
+      result["tokens"]["bal"][i] +
+      "\n";
+    msg += comb;
+  }
+  msg += "\nwill be loaded to your account";
+  // console.log(msg);
+  UnLoading();
+  _SendMsg("_0604", msg);
+}
+
+async function _AutoLoad() {
+  Loading();
+  const all = await _GetAll();
+  const currIdx = all["currAcc"];
+  const curr = all["accList"][currIdx];
+  const fromAddress = curr["address"];
+
+  const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  const response = await fetch(CrawlingServerUrl);
+
+  const result = await response.json();
+  chrome.storage.sync.get(null, function (obj) {
+    for (let i = 0; i < result["tokens"]["name"].length; i++) {
+      let tokInfo = [
+        result["tokens"]["name"][i],
+        result["tokens"]["sym"][i],
+        result["tokens"]["bal"][i],
+        result["tokens"]["link"][i],
+      ];
+      obj["accList"][currIdx]["balance"].push(tokInfo);
+    }
+    chrome.storage.sync.set(obj, function () {
+      console.log("Saved");
+      console.log(obj);
+      // alert("Loaded");
+      UnLoading();
+      GoHome();
     });
   });
 }

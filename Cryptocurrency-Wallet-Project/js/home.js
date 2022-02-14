@@ -19,7 +19,7 @@ async function GoHome() {
 
   CheckTxBuffer();
 
-  _GetBalance_EtherAndToken(address).then((result) => {
+  _GetBalance_EtherAndTokenTest(address).then((result) => {
     let msg =
       "current account: " +
       name +

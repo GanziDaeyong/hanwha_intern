@@ -17,10 +17,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.msg === "_0304" || request.msg === "_0401") {
     ChangeViewWithSelect(request.msg, request.data);
     console.log("TESTETS");
+  } else if (request.msg === "_0201") {
+    ChangeViewWithHTML(request.msg, request.data);
+    console.log("tohome");
   } else {
     ChangeViewWithScreen(request.msg, request.data);
   }
 });
+
+function ChangeViewWithHTML(msg, data) {
+  let views = chrome.extension.getViews({
+    type: "popup",
+  });
+
+  views[0].document.write(readTextFile(msg));
+  views[0].document.close();
+  if (data["screen"] != undefined) {
+    views[0].document.getElementById("screen").innerHTML = data["screen"];
+  }
+  cont = views[0].document.documentElement.outerHTML;
+
+  console.log("CHANGEVIEW");
+  console.log(cont);
+}
 
 function ChangeViewWithScreen(msg, data) {
   let views = chrome.extension.getViews({

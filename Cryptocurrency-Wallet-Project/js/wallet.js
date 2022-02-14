@@ -16,7 +16,8 @@ $("#_0101_button_login").click(function () {
   LoadWallet(pw);
 });
 
-function MakeAndSaveWallet(pw) {
+async function MakeAndSaveWallet(pw) {
+  const pw = await sha256(pw);
   console.log("->" + pw);
   web3.eth.accounts.wallet.clear();
   web3.eth.accounts.wallet.create(0, "randomstring");
@@ -35,7 +36,9 @@ function MakeAndSaveWallet(pw) {
   });
 }
 
-function LoadWallet(pw) {
+async function LoadWallet(pw) {
+  const pw = sha256(pw);
+
   chrome.storage.sync.get(null, function (res) {
     if (res["walletpw"] != undefined && res["walletpw"] == pw) {
       console.log("[INFO] Login Succeeded");
@@ -46,4 +49,14 @@ function LoadWallet(pw) {
       console.log("[INFO] Login Failed. Wrong PW");
     }
   });
+}
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
 }

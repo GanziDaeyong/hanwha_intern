@@ -96,6 +96,29 @@ async function _GetBalance_EtherAndToken(accountAddress) {
 
   return res;
 }
+async function _GetBalance_EtherAndTokenTest(accountAddress) {
+  let res = "";
+
+  const getbalance = await web3.eth.getBalance(accountAddress);
+  const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
+  res += "eth: " + ethBal + "\n";
+
+  const curr = await _GetCurr();
+  const tokList = curr["balance"];
+
+  //<link rel="stylesheet" type="text/css" href="/examples/media/expand_style.css">
+
+  for (let eachTokList of tokList) {
+    const linkToEtherscan =
+      "https://ropsten.etherscan.io/token/" + eachTokList[3];
+    const a = '<a href="' + linkToEtherscan + '" target="_blank">';
+    const b = eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
+    const c = "</a><br/>";
+    res += a + b + c;
+  }
+
+  return res;
+}
 async function _GetBalance(accountAddress) {
   const getbalance = await web3.eth.getBalance(accountAddress);
   const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
