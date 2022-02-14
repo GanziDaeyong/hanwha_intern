@@ -5,7 +5,6 @@ $("#_0201_button_account").click(function () {
 
 $("#_0301_button_create").click(function () {
   let screenMsg = CreateAccount();
-  alert(screenMsg);
   _SendMsg("_0302", screenMsg);
 });
 

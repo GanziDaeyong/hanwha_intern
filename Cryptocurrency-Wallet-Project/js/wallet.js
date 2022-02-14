@@ -17,7 +17,7 @@ $("#_0101_button_login").click(function () {
 });
 
 async function MakeAndSaveWallet(pw) {
-  const pw = await sha256(pw);
+  pw = await sha256(pw);
   console.log("->" + pw);
   web3.eth.accounts.wallet.clear();
   web3.eth.accounts.wallet.create(0, "randomstring");
@@ -37,16 +37,16 @@ async function MakeAndSaveWallet(pw) {
 }
 
 async function LoadWallet(pw) {
-  const pw = sha256(pw);
-
+  pw = await sha256(pw);
+  console.log(pw);
   chrome.storage.sync.get(null, function (res) {
+    console.log(res);
     if (res["walletpw"] != undefined && res["walletpw"] == pw) {
       console.log("[INFO] Login Succeeded");
       // _SendMsg("_0201");
       GoHome();
     } else {
       alert("invalid password");
-      console.log("[INFO] Login Failed. Wrong PW");
     }
   });
 }

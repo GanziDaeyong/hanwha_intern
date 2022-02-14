@@ -4,29 +4,29 @@ $("#_home").click(function () {
 });
 
 // Get current account's balance and address
-$("#_balance").click(function () {
-  //   console.log("dddd");
-  //   console.log(_GetAddress); //
-  //   // Send to Home and Append Balance
-  //   //   let add = "0x5CCE38322F190EAB8Abc7Ceb23E816Cf7d3b48DC";
-  //   let bal;
+$("#contact").click(function () {
+  _SendMsg("dev");
 });
 // TODO: No Account Created & Go Home stucks
 async function GoHome() {
-  const curr = await _GetCurr();
-  const address = curr["address"];
-  const name = curr["name"];
+  try {
+    const curr = await _GetCurr();
+    const address = curr["address"];
+    const name = curr["name"];
+    CheckTxBuffer();
 
-  CheckTxBuffer();
-
-  _GetBalance_EtherAndTokenTest(address).then((result) => {
-    let msg =
-      "current account: " +
-      name +
-      "\ncurrent address: " +
-      address +
-      "\ncurrent balance:\n" +
-      result;
+    _GetBalance_EtherAndTokenTest(address).then((result) => {
+      let msg =
+        "<br><strong>current account:</strong><br>" +
+        name +
+        "<br><br><strong>current address:</strong><br>" +
+        address +
+        "<br><br><strong>current balance:</strong><br>" +
+        result;
+      _SendMsg("_0201", msg);
+    });
+  } catch (err) {
+    let msg = "Please create or load account first";
     _SendMsg("_0201", msg);
-  });
+  }
 }
