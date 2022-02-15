@@ -31,23 +31,35 @@ async function AddOptions_Send() {
     // $("#_0304_select_transition").append(selectOptions);
     // https://24hours-beginner.tistory.com/98
   }
-  console.log(options);
   _SendMsg("_0401", options);
 }
+
 async function ValidateSendInfo_Token(toAddress, amount, currency) {
   // 0    preparation
+  Loading();
+  // 1    check toaddress
+  const isValidAddress = web3.utils.isAddress(toAddress);
+  if (!isValidAddress) {
+    UnLoading();
+    alert("Invalid Address");
+    return;
+  }
+
+  UnLoading();
+
+  if (!Number.isInteger(amount)) {
+    UnLoading();
+    alert(
+      "Already at maximum precision. Please put an integer value. Value '1' here refers to 1e-18."
+    );
+    return;
+  }
   const update = await UpdateTokenBalance(1);
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
   const tokList = curr["balance"];
   const fromBalance = await _GetBalance(fromAddress);
-
-  // 1    check toaddress
-  const isValidAddress = web3.utils.isAddress(toAddress);
-  if (!isValidAddress) {
-    alert("Invalid Address");
-    return;
-  }
+  Loading();
 
   // 2    check transaction fee
   const gasLimit = 50000;
@@ -55,6 +67,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   const expected = gasPrice * gasLimit;
   const isEnoughEther = fromBalance > expected;
   if (!isEnoughEther) {
+    UnLoading();
     alert("ether not enough to pay transaction fee");
     return;
   }
@@ -71,6 +84,8 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   tokBalance /= 1e18;
   const isEnoughToken = tokBalance > amount;
   if (!isEnoughToken) {
+    UnLoading();
+
     alert("not enough token");
     return;
   }
@@ -80,23 +95,25 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   if (isValidAddress && isEnoughEther && isEnoughToken) {
     alert("Validated");
     let msg =
-      "currency type[" +
+      "<br><strong>Currency Type</strong><br>[" +
       currency +
-      "]\n\nsender address[" +
+      "]<br><br><strong>Sender Address</strong><br>[" +
       fromAddress +
-      "]\n\nreceipient address[" +
+      "]<br><br><strong>Receipient Address</strong><br>[" +
       toAddress +
-      "]\n\namount[" +
+      "]<br><br><strong>Amount</strong><br>[" +
       amount +
-      "]\n\ngas price[" +
+      "]<br><br><strong>Gas Price</strong><br>[" +
       gasPrice +
-      "]\n\ngas limit[" +
+      "]<br><br><strong>Gas Limit</strong><br>[" +
       gasLimit +
-      "]\n\nmaximum gas can be spent[" +
+      "]<br><br><strong>Maximum Gas That Can Be Spent</strong><br>[" +
       expected +
-      "]\n\ntotal amount[" +
+      "]<br><br><strong>total amount</strong><br>[" +
       total +
-      "]\n";
+      "]";
+    UnLoading();
+
     _SendMsg("_0402", msg);
   }
 }
@@ -111,6 +128,10 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
   const isValidAddress = web3.utils.isAddress(toAddress);
   if (!isValidAddress) {
     alert("Invalid Address");
+    return;
+  }
+  if (amount <= 0) {
+    alert("Amount should be greater than 0");
     return;
   }
 
@@ -132,23 +153,41 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
 
   if (isValidAddress && isBalanceEnough) {
     alert("Validated");
+    // let msg =
+    //   "currency type[ether" +
+    //   "]\n\nsender address[" +
+    //   fromAddress +
+    //   "]\n\nreceipient address[" +
+    //   toAddress +
+    //   "]\n\namount[" +
+    //   amount +
+    //   "]\n\ngas price[" +
+    //   gasPrice +
+    //   "]\n\ngas limit[" +
+    //   gasLimit +
+    //   "]\n\ntotal gas[" +
+    //   expected +
+    //   "]\n\ntotal amount[" +
+    //   total +
+    //   "]\n";
+
     let msg =
-      "currency type[ether" +
-      "]\n\nsender address[" +
+      "<br><strong>Currency Type</strong><br>[ether" +
+      "]<br><br><strong>Sender Address</strong><br>[" +
       fromAddress +
-      "]\n\nreceipient address[" +
+      "]<br><br><strong>Receipient Address</strong><br>[" +
       toAddress +
-      "]\n\namount[" +
+      "]<br><br><strong>Amount</strong><br>[" +
       amount +
-      "]\n\ngas price[" +
+      "]<br><br><strong>Gas Price</strong><br>[" +
       gasPrice +
-      "]\n\ngas limit[" +
+      "]<br><br><strong>Gas Limit</strong><br>[" +
       gasLimit +
-      "]\n\ntotal gas[" +
+      "]<br><br><strong>Maximum Gas That Can Be Spent</strong><br>[" +
       expected +
-      "]\n\ntotal amount[" +
+      "]<br><br><strong>Total Amount</strong><br>[" +
       total +
-      "]\n";
+      "]";
     _SendMsg("_0402", msg);
   }
 }
@@ -157,6 +196,7 @@ async function _GetAvgGasPrice() {
   return gasprice;
 }
 async function SendTx() {
+  Loading();
   let text = $("#screen").text();
   text = text.split("]");
   for (let i = 0; i < text.length; i++) {
@@ -201,7 +241,7 @@ async function SendTx() {
     web3.eth.sendSignedTransaction(raw, (err, txHash) => {
       console.log(err);
       console.log(txHash);
-      alert("Transaction Sent");
+
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
       const time = _GetTimeSec();
       let msg =
@@ -212,7 +252,7 @@ async function SendTx() {
         "]";
       const txObj = _TxBufferStruct(
         "send",
-        currencyType,
+        currencyName,
         txHash,
         fromAddress,
         toAddress,
@@ -220,6 +260,7 @@ async function SendTx() {
         time
       );
       _TxBufferPush(txObj);
+      UnLoading();
       _SendMsg("_0402_2", msg);
     });
   });

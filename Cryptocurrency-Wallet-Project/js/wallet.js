@@ -21,19 +21,22 @@ async function MakeAndSaveWallet(pw) {
   console.log("->" + pw);
   web3.eth.accounts.wallet.clear();
   web3.eth.accounts.wallet.create(0, "randomstring");
+  // await chrome.storage.sync.clear(function () {});
+  await chrome.storage.sync.clear();
+
   // web3.eth.accounts.wallet.save(pw);
   if (web3.eth.accounts.wallet.save(pw)) {
     console.log("wallet created & saved");
-    _SendMsg("_0201");
+    //save at extension storage
+    let saveinfo = _StorageStruct(pw);
+    chrome.storage.sync.set(saveinfo, function () {
+      console.log("wallet saved on extension");
+    });
+    // _SendMsg("_0201");
+    GoHome();
   } else {
     console.log("wallet not created");
   }
-  chrome.storage.sync.clear(function () {});
-  //save at extension storage
-  let saveinfo = _StorageStruct(pw);
-  chrome.storage.sync.set(saveinfo, function () {
-    console.log("wallet saved on extension");
-  });
 }
 
 async function LoadWallet(pw) {

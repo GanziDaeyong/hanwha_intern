@@ -1,4 +1,5 @@
 function _SendMsg(msg, src) {
+  console.log("sent");
   chrome.runtime.sendMessage({
     msg: msg,
     data: {
@@ -106,8 +107,6 @@ async function _GetBalance_EtherAndTokenTest(accountAddress) {
   const curr = await _GetCurr();
   const tokList = curr["balance"];
 
-  //<link rel="stylesheet" type="text/css" href="/examples/media/expand_style.css">
-
   for (let eachTokList of tokList) {
     const linkToEtherscan =
       "https://ropsten.etherscan.io/token/" + eachTokList[3];
@@ -119,6 +118,7 @@ async function _GetBalance_EtherAndTokenTest(accountAddress) {
 
   return res;
 }
+
 async function _GetBalance(accountAddress) {
   const getbalance = await web3.eth.getBalance(accountAddress);
   const ethBal = String(web3.utils.fromWei(getbalance, "ether"));

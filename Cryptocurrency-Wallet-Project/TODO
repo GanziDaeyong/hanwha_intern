@@ -1,12 +1,5 @@
-
-지갑 비밀번호 해싱 로직 구현하기
-
-
-
-개인키 가져올 때 앞에 0x 나오는거 명확히
-토큰 생성 시 total supply 숫자 처리 필요
-토큰 생성 시 중간에 (0602_2 -> 0602_3) 다른 작업 막기
-로그에서 예외 케이스 처리하기 : undefined인 경우
-ImportToken 시 token contract 맞나 validity 확인
-ImportToken 시 이미 import된 토큰인지 validiation
-Sendtoken에서 일부 겹치는거 ether와 합치기
+(1) ether / token decimal should be controlled.
+    ether -> decimal process
+    token too
+    
+(2) 

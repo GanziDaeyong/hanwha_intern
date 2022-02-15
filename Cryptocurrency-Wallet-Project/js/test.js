@@ -13,10 +13,13 @@ $("#test").click(function () {
 function Loading() {
   let loadingImg = "<img id='loadingImg' src='../loading.svg'/>";
   $("#main_body").append(loadingImg);
+  console.log(document.getElementById("main_body").innerHTML);
 }
 function UnLoading() {
-  let loadingImg = "<img id='loadingImg' src='../loading.svg'/>";
-  $("#main_body").remove("#loadingImg");
+  // $("#main_body").remove("#loadingImg");
+  $("#loadingImg").remove();
+
+  console.log(document.getElementById("main_body").innerHTML);
 }
 // //화면에 출력할 마스크를 설정해줍니다.
 // var mask       ="<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;'></div>";

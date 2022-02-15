@@ -13,10 +13,10 @@
 	password <input id = "_0101_input_password"></input>	
 	</p>
 	<p>Log in with above password
-		<button id = "_0101_button_login">log in</button>
+		<button class="bt" id = "_0101_button_login">log in</button>
 	</p>
 	<p>Create wallet with above password 
-		<button id = "_0101_button_create">create wallet</button>
+		<button class="bt" id = "_0101_button_create">create wallet</button>
 	</div>
 
 	<!-- Scripts -->

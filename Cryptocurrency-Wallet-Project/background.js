@@ -6,9 +6,7 @@
 
 try {
   let cont = "default";
-} catch (ex) {
-  console.log("to console");
-}
+} catch (ex) {}
 // let cont = "default";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -16,12 +14,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     SyncView();
   } else if (request.msg === "_0304" || request.msg === "_0401") {
     ChangeViewWithSelect(request.msg, request.data);
-    console.log("TESTETS");
   } else if (request.msg === "_0201") {
     ChangeViewWithHTML(request.msg, request.data);
-    console.log("tohome");
   } else {
-    ChangeViewWithScreen(request.msg, request.data);
+    // ChangeViewWithScreen(request.msg, request.data);
+    ChangeViewWithHTML(request.msg, request.data);
   }
 });
 
@@ -36,9 +33,6 @@ function ChangeViewWithHTML(msg, data) {
     views[0].document.getElementById("screen").innerHTML = data["screen"];
   }
   cont = views[0].document.documentElement.outerHTML;
-
-  console.log("CHANGEVIEW");
-  console.log(cont);
 }
 
 function ChangeViewWithScreen(msg, data) {
@@ -54,16 +48,12 @@ function ChangeViewWithScreen(msg, data) {
     views[0].document.getElementById("screen").innerText = data["screen"];
   }
   cont = views[0].document.documentElement.outerHTML;
-
-  console.log("CHANGEVIEW");
-  console.log(cont);
 }
 
 function ChangeViewWithSelect(msg, data) {
   let views = chrome.extension.getViews({
     type: "popup",
   });
-  console.log(data["option"]);
 
   views[0].document.write(readTextFile(msg));
   views[0].document.close();
@@ -73,6 +63,7 @@ function ChangeViewWithSelect(msg, data) {
   if (msg == "_0304") {
     views[0].document.getElementById("_0304_select_transition").innerHTML =
       data["option"];
+    // views[0].document.getElementById("options").innerHTML = data["option"];
   }
   if (msg == "_0401") {
     views[0].document.getElementById("_0401_select_transition").innerHTML =
