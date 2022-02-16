@@ -66,6 +66,24 @@ function CreateAccount() {
   _SendMsg("_0302", msg);
 }
 
+function _ValidateAdd(address) {
+  if (address.length == 42) {
+    if (address[0] == "0" && address[1] == "x") {
+      if (_isAlnum(address)) {
+        return address;
+      }
+    }
+  }
+  if (address.length == 40) {
+    if (address[0] != "0" && address[1] != "x") {
+      if (_isAlnum(address)) {
+        return "0x" + address;
+      }
+    }
+  }
+  return "fail";
+}
+
 function _ValidatePk(pk) {
   console.log(pk.length);
   if (pk.length == 66) {
@@ -104,15 +122,44 @@ function _isAlnum(str) {
   return true;
 }
 
-function LoadAccount(pk) {
+// function _isNum(str) {
+//   var code, i, len;
+
+//   for (i = 0, len = str.length; i < len; i++) {
+//     code = str.charCodeAt(i);
+//     if (!(code > 47 && code < 58)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
+
+async function LoadAccount(pk) {
   if (_ValidatePk(pk) == "fail") {
     alert("invalid private key");
     return;
   }
-  Loading();
 
   // TODO: 예외처리 / pk의 validity 확인필요하다.
   let loadAccount = web3.eth.accounts.privateKeyToAccount(pk); // account obj
+  console.log(loadAccount.address);
+  let exist = false;
+  try {
+    accs = await _GetList();
+    console.log(accs);
+    for (const acc of accs) {
+      if (acc["address"] == loadAccount.address) {
+        exist = true;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  if (exist) {
+    alert("Account Already Imported");
+    return;
+  }
+
   let newAccount = web3.eth.accounts.wallet.add(loadAccount);
 
   _SaveWalletWeb3js();

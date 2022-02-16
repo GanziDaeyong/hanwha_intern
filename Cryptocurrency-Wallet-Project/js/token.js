@@ -36,10 +36,17 @@ $("#_0604_button_load").click(function () {
 });
 
 async function ValidateTokenCreateInfo(name, sym, totalsupply) {
-  if (name == "" || sym == "" || totalsupply <= 0.0) {
-    const alertmsg =
-      "Name should not be empty\nSymbol should not be empty\nTotal Supply should be positive value";
+  if (name == "" || !_isAlnum(name)) {
+    alert("Token name should not be empty, nor contain special letters");
+    return;
+  }
 
+  if (totalsupply <= 0.0 || !Number.isInteger(Number(totalsupply))) {
+    alert("Total Supply should be positive integer");
+    return;
+  }
+
+  if (name == "" || sym == "" || totalsupply <= 0.0) {
     alert(alertmsg);
     return;
   }
@@ -49,8 +56,8 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
   const fromBalance = await _GetBalance(fromAddress);
 
   // Get Expected Gas
-  const gasLimit = 3000000; // Raise the gas limit to a much higher amount
-  const gasPrice = 0.00000008; // 얘를 가져와서 쓰기
+  const gasLimit = 3000000;
+  const gasPrice = 0.00000008;
   const total = gasLimit * gasPrice;
 
   const isBalanceEnough = parseFloat(total) <= parseFloat(fromBalance);
@@ -61,21 +68,21 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
 
   alert("Validated");
   let msg =
-    "creator address[" +
+    "<br><strong>Creator Address</strong><br>[" +
     fromAddress +
-    "]\n\ntoken full name[" +
+    "]<br><br><strong>Token Name</strong><br>[" +
     name +
-    "]\n\ntoken symbol[" +
+    "]<br><br><strong>Token Symbol</strong><br>[" +
     sym +
-    "]\n\ntotal supply[" +
+    "]<br><br><strong>Total Supply</strong><br>[" +
     totalsupply +
-    "]\n\ngas price[" +
+    "]<br><br><strong>Gas Price</strong><br>[" +
     gasPrice +
-    "]\n\ngas limit[" +
+    "]<br><br><strong>Gas Limit</strong><br>[" +
     gasLimit +
-    "]\n\nmax amount(can be spent at most)[" +
+    "]<br><br><strong>Max Amount</strong>(can be spent at most)<br>[" +
     total +
-    "]\n";
+    " ether]";
   _SendMsg("_0602_2", msg);
 }
 
@@ -161,9 +168,9 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
 
       let msg =
-        "transaction hash\n[" +
+        "<br><strong>Transaction Hash</strong><br>[" +
         txHash +
-        "]\n\nurl to etherscan\n[" +
+        "]<br><br><strong>Url to Etherscan</strong><br>[" +
         toEtherscan +
         "]";
       _SendMsg("_0602_3", msg);
@@ -173,7 +180,7 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
         currency,
         txHash,
         fromAddress,
-        "null",
+        toEtherscan,
         totalsupply * 1e-18,
         time
       );
@@ -182,64 +189,68 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
   });
 }
 
-async function LoadToken(tokenAddress) {
-  // async function ImportToken(tokenAddress) {
+// async function LoadToken(tokenAddress) {
+//   // async function ImportToken(tokenAddress) {
 
-  // dyt 0x30354b1a08b628dc98d185d3d3364009206e2379
-  // aat 0x37f93c7790249901B80B9e1517Af2879e0a98458
-  // const tokenAddress = "0x37f93c7790249901B80B9e1517Af2879e0a98458";
-  const curr = await _GetCurr();
-  const fromAddress = curr["address"];
+//   // dyt 0x30354b1a08b628dc98d185d3d3364009206e2379
+//   // aat 0x37f93c7790249901B80B9e1517Af2879e0a98458
+//   // const tokenAddress = "0x37f93c7790249901B80B9e1517Af2879e0a98458";
+//   const curr = await _GetCurr();
+//   const fromAddress = curr["address"];
+//   const isValidAddress = web3.utils.isAddress(toAddress);
+//   if (!isValidAddress) {
+//     alert("Invalid Token Address");
+//     return;
+//   }
+//   let minABI = [
+//     // balanceOf
+//     {
+//       constant: true,
+//       inputs: [],
+//       name: "symbol",
+//       outputs: [{ name: "", type: "string" }],
+//       type: "function",
+//     },
+//     {
+//       constant: true,
+//       inputs: [],
+//       name: "name",
+//       outputs: [{ name: "", type: "string" }],
+//       type: "function",
+//     },
 
-  let minABI = [
-    // balanceOf
-    {
-      constant: true,
-      inputs: [],
-      name: "symbol",
-      outputs: [{ name: "", type: "string" }],
-      type: "function",
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: "name",
-      outputs: [{ name: "", type: "string" }],
-      type: "function",
-    },
+//     {
+//       constant: true,
+//       inputs: [{ name: "_owner", type: "address" }],
+//       name: "balanceOf",
+//       outputs: [{ name: "balance", type: "uint256" }],
+//       type: "function",
+//     },
+//     // decimals
+//     {
+//       constant: true,
+//       inputs: [],
+//       name: "decimals",
+//       outputs: [{ name: "", type: "uint8" }],
+//       type: "function",
+//     },
+//   ];
 
-    {
-      constant: true,
-      inputs: [{ name: "_owner", type: "address" }],
-      name: "balanceOf",
-      outputs: [{ name: "balance", type: "uint256" }],
-      type: "function",
-    },
-    // decimals
-    {
-      constant: true,
-      inputs: [],
-      name: "decimals",
-      outputs: [{ name: "", type: "uint8" }],
-      type: "function",
-    },
-  ];
+//   const contract = new web3.eth.Contract(minABI, tokenAddress);
+//   const balance = await contract.methods.balanceOf(fromAddress).call();
+//   const name = await contract.methods.name().call();
+//   const sym = await contract.methods.symbol().call();
 
-  const contract = new web3.eth.Contract(minABI, tokenAddress);
-  const balance = await contract.methods.balanceOf(fromAddress).call();
-  const name = await contract.methods.name().call();
-  const sym = await contract.methods.symbol().call();
+//   chrome.storage.sync.get(null, function (obj) {
+//     const idx = obj["currAcc"];
+//     const tokInfo = [name, sym, balance, tokenAddress];
+//     obj["accList"][idx]["balance"].push(tokInfo);
 
-  chrome.storage.sync.get(null, function (obj) {
-    const idx = obj["currAcc"];
-    const tokInfo = [name, sym, balance, tokenAddress];
-    obj["accList"][idx]["balance"].push(tokInfo);
-
-    chrome.storage.sync.set(obj, function () {
-      console.log(obj);
-    });
-  });
-}
+//     chrome.storage.sync.set(obj, function () {
+//       console.log(obj);
+//     });
+//   });
+// }
 
 async function UpdateTokenBalance(zeroforgohome) {
   Loading();
@@ -292,6 +303,24 @@ async function LoadToken(tokenAddress) {
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
 
+  const isValidAddress = web3.utils.isAddress(tokenAddress);
+  if (!isValidAddress) {
+    alert("Invalid Token Address");
+    UnLoading();
+    return;
+  }
+
+  tokenAddress = _ValidateAdd(tokenAddress);
+
+  const tokenList = curr["balance"];
+  for (let eachTokInfo of tokenList) {
+    if (eachTokInfo[3] == tokenAddress) {
+      alert("Token Already Imported");
+      UnLoading();
+      return;
+    }
+  }
+
   let minABI = [
     // balanceOf
     {
@@ -339,13 +368,13 @@ async function LoadToken(tokenAddress) {
     chrome.storage.sync.set(obj, function () {
       console.log(obj);
       const msg =
-        "token address [" +
+        "<br><strong>Token Address</strong><br>[" +
         tokenAddress +
-        "]\nname [ " +
+        "]<br><br><strong>Token Name</strong><br>[" +
         name +
-        "]\nsymbol [" +
+        "]<br><br><strong>Token Symbol</strong><br>[" +
         sym +
-        "]\nbalance [" +
+        "]<br><br><strong>Token Balance</strong><br>[" +
         balance +
         "]";
       UnLoading();
@@ -366,17 +395,43 @@ async function _GetTokenFromServer() {
   console.log(result);
   // let msg = result;
   let msg = "";
+
+  const tokLen = result["tokens"]["name"].length;
+  if (tokLen == 0) {
+    alert("Current account doesn't possess any token");
+    UnLoading();
+    _SendMsg("_0601", msg);
+    return;
+  }
+
+  const tokenList = curr["balance"];
+
   for (let i = 0; i < result["tokens"]["name"].length; i++) {
+    let isDuplicate = false;
+    for (let eachTokInfo of tokenList) {
+      if (eachTokInfo[3] == result["tokens"]["link"][i]) {
+        isDuplicate = true;
+        break;
+      }
+    }
+    if (isDuplicate) continue;
     const comb =
+      "<br>" +
       result["tokens"]["name"][i] +
       " (" +
       result["tokens"]["sym"][i] +
       ") : " +
-      result["tokens"]["bal"][i] +
-      "\n";
+      result["tokens"]["bal"][i];
     msg += comb;
   }
-  msg += "\nwill be loaded to your account";
+
+  if (msg.trim() == "") {
+    alert("All tokens are already imported");
+    UnLoading();
+    _SendMsg("_0601", msg);
+    return;
+  }
+  msg += "<br><br>will be loaded to your account";
   // console.log(msg);
   UnLoading();
   _SendMsg("_0604", msg);
@@ -392,9 +447,18 @@ async function _AutoLoad() {
   const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
   const response = await fetch(CrawlingServerUrl);
 
+  const tokenList = curr["balance"];
+
   const result = await response.json();
   chrome.storage.sync.get(null, function (obj) {
     for (let i = 0; i < result["tokens"]["name"].length; i++) {
+      let isDuplicate = false;
+      for (let eachTokInfo of tokenList) {
+        if (eachTokInfo[3] == result["tokens"]["link"][i]) {
+          isDuplicate = true;
+          break;
+        }
+      }
       let tokInfo = [
         result["tokens"]["name"][i],
         result["tokens"]["sym"][i],

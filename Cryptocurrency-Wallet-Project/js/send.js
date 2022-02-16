@@ -37,23 +37,32 @@ async function AddOptions_Send() {
 async function ValidateSendInfo_Token(toAddress, amount, currency) {
   // 0    preparation
   Loading();
+
   // 1    check toaddress
   const isValidAddress = web3.utils.isAddress(toAddress);
   if (!isValidAddress) {
     UnLoading();
-    alert("Invalid Address");
+    alert("Amount is not a number");
+
     return;
   }
 
   UnLoading();
-
-  if (!Number.isInteger(amount)) {
+  const amountFixed = amount.toString();
+  amount = Number(amount);
+  if (isNaN(amount)) {
+    alert("Invalid Amount");
     UnLoading();
-    alert(
-      "Already at maximum precision. Please put an integer value. Value '1' here refers to 1e-18."
-    );
     return;
   }
+  const amountFixedSplit = amountFixed.split(".");
+  if (!Number.isInteger(amount) && amountFixedSplit.length == 2) {
+    if (amountFixedSplit[1].length >= 19) {
+      alert("Maximum 18 decimal (1 wei)");
+      return;
+    }
+  }
+
   const update = await UpdateTokenBalance(1);
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
@@ -76,12 +85,13 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   let tokBalance = 0;
   for (let eachTokList of tokList) {
     if (eachTokList[0] == currency) {
+      // tokBalance = new BN(eachTokList[2]);
       tokBalance = eachTokList[2];
       break;
     }
   }
   //TODO: adjust balance
-  tokBalance /= 1e18;
+  // tokBalance /= 1e18;
   const isEnoughToken = tokBalance > amount;
   if (!isEnoughToken) {
     UnLoading();
@@ -102,7 +112,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
       "]<br><br><strong>Receipient Address</strong><br>[" +
       toAddress +
       "]<br><br><strong>Amount</strong><br>[" +
-      amount +
+      amountFixed +
       "]<br><br><strong>Gas Price</strong><br>[" +
       gasPrice +
       "]<br><br><strong>Gas Limit</strong><br>[" +
@@ -118,17 +128,31 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   }
 }
 async function ValidateSendInfo_Ether(toAddress, amount) {
-  //   var BN = web3.utils.BN;
-
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
   const fromBalance = await _GetBalance(fromAddress);
 
-  // Check Address
   const isValidAddress = web3.utils.isAddress(toAddress);
   if (!isValidAddress) {
     alert("Invalid Address");
     return;
+  }
+  toAddress = _ValidateAdd(toAddress);
+  // console.log(amount);
+  const amountFixed = amount.toString();
+  amount = Number(amount); // DO NOT CHANGE ORDER OF amountFixed and amount
+  if (isNaN(amount)) {
+    alert("Amount is not a number");
+    UnLoading();
+    return;
+  }
+
+  const amountFixedSplit = amountFixed.split(".");
+  if (!Number.isInteger(amount) && amountFixedSplit.length == 2) {
+    if (amountFixedSplit[1].length >= 19) {
+      alert("Maximum 18 decimal (1 wei)");
+      return;
+    }
   }
   if (amount <= 0) {
     alert("Amount should be greater than 0");
@@ -178,7 +202,7 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
       "]<br><br><strong>Receipient Address</strong><br>[" +
       toAddress +
       "]<br><br><strong>Amount</strong><br>[" +
-      amount +
+      amountFixed +
       "]<br><br><strong>Gas Price</strong><br>[" +
       gasPrice +
       "]<br><br><strong>Gas Limit</strong><br>[" +
@@ -223,14 +247,18 @@ async function SendTx() {
   }
 
   web3.eth.getTransactionCount(fromAddress, (err, txCount) => {
+    console.log("GOOD");
+
     const txObject = {
       nonce: web3.utils.toHex(txCount),
       to: toAddress,
+      // value: web3.utils.toHex(
+      //   web3.utils.toBN(web3.utils.toWei(amount, "ether"))
+      // ),
       value: web3.utils.toHex(web3.utils.toWei(amount, "ether")),
       gasLimit: web3.utils.toHex(21000),
       gasPrice: web3.utils.toHex(web3.utils.toWei(gasPrice, "ether")),
     };
-
     const tx = new ethereumjs.Tx(txObject);
     tx.sign(privateKey);
 
@@ -245,9 +273,9 @@ async function SendTx() {
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
       const time = _GetTimeSec();
       let msg =
-        "transaction hash\n[" +
+        "<br><strong>Transaction Hash</strong><br>[" +
         txHash +
-        "]\n\nurl to etherscan\n[" +
+        "]<br><br><strong>Url To Etherscan</strong><br>[" +
         toEtherscan +
         "]";
       const txObj = _TxBufferStruct(
@@ -293,6 +321,7 @@ async function SendTok(
   const contract = new web3.eth.Contract(abiArray, tokenAddress, {
     from: fromAddress,
   });
+  const amountHex = web3.utils.toHex(web3.utils.toWei(amount, "ether"));
   const count = await web3.eth.getTransactionCount(fromAddress);
   const gasLimit = web3.utils.toHex(50000); // Raise the gas limit to a much higher amount
   const gasPrice = web3.utils.toHex(web3.utils.toWei("30", "gwei")); // 얘를 가져와서 쓰기
@@ -305,7 +334,7 @@ async function SendTok(
     gasLimit: gasLimit,
     to: tokenAddress,
     value: "0x0",
-    data: contract.methods.transfer(toAddress, amount).encodeABI(),
+    data: contract.methods.transfer(toAddress, amountHex).encodeABI(),
     // data: contract.transfer.getData(toAddress, 0.01, { from: fromAddress }),
     chainId: 0x03, // 3 for ropsten
   };
@@ -321,11 +350,11 @@ async function SendTok(
     const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
     const time = _GetTimeSec();
     let msg =
-      "transaction hash\n[" +
+      "<br><strong>Transaction Hash</strong><br>[" +
       txHash +
-      "]\n\nurl to etherscan\n[" +
+      ']<br><br><strong>URL to Etherscan</strong><br><a href="' +
       toEtherscan +
-      "]";
+      '" target="_blank">click!</a><br>';
     const txObj = _TxBufferStruct(
       "send",
       currencyName,
@@ -336,6 +365,7 @@ async function SendTok(
       time
     );
     _TxBufferPush(txObj);
+    console.log(msg);
     _SendMsg("_0402_2", msg);
   });
 }

@@ -252,3 +252,12 @@ input[type="image"] {
 * {
   user-select: none;
 }
+
+.caution {
+  color: rgb(100, 0, 0);
+}
+
+.inputAlign {
+  position: absolute;
+  left: 130px;
+}
