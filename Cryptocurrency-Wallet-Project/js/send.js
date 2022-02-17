@@ -50,17 +50,25 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   UnLoading();
   const amountFixed = amount.toString();
   amount = Number(amount);
-  if (isNaN(amount)) {
-    alert("Invalid Amount");
+  // if (isNaN(amount)) {
+  //   alert("Invalid Amount");
+  //   UnLoading();
+  //   return;
+  // }
+  // const amountFixedSplit = amountFixed.split(".");
+  // if (!Number.isInteger(amount) && amountFixedSplit.length == 2) {
+  //   if (amountFixedSplit[1].length >= 19) {
+  //     alert("Maximum 18 decimal (1 wei)");
+  //     return;
+  //   }
+  // }
+  const MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+
+  // if (totalsupply <= 0.0 || !Number.isInteger(Number(totalsupply))) {
+  if (isNaN(amount) || amount <= 0.0 || amount < 1e-18 || amount > MAX_INT) {
+    alert("Amount should be positive number, between 1e-18 ~ 1e+77");
     UnLoading();
     return;
-  }
-  const amountFixedSplit = amountFixed.split(".");
-  if (!Number.isInteger(amount) && amountFixedSplit.length == 2) {
-    if (amountFixedSplit[1].length >= 19) {
-      alert("Maximum 18 decimal (1 wei)");
-      return;
-    }
   }
 
   const update = await UpdateTokenBalance(1);
@@ -141,21 +149,9 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
   // console.log(amount);
   const amountFixed = amount.toString();
   amount = Number(amount); // DO NOT CHANGE ORDER OF amountFixed and amount
-  if (isNaN(amount)) {
-    alert("Amount is not a number");
+  if (isNaN(amount) || amount <= 0.0 || amount < 1e-18 || amount > MAX_INT) {
+    alert("Amount should be positive number, between 1e-18 ~ 1e+77");
     UnLoading();
-    return;
-  }
-
-  const amountFixedSplit = amountFixed.split(".");
-  if (!Number.isInteger(amount) && amountFixedSplit.length == 2) {
-    if (amountFixedSplit[1].length >= 19) {
-      alert("Maximum 18 decimal (1 wei)");
-      return;
-    }
-  }
-  if (amount <= 0) {
-    alert("Amount should be greater than 0");
     return;
   }
 
@@ -338,7 +334,8 @@ async function SendTok(
     // data: contract.transfer.getData(toAddress, 0.01, { from: fromAddress }),
     chainId: 0x03, // 3 for ropsten
   };
-
+  //115792089237316195423570985008687907853269984665640564039457584007913129639935
+  //99999999999999999999999999999999999999999999999999999999999999999999999999999
   const tx = new ethereumjs.Tx(txObject, { chain: "ropsten" });
   tx.sign(privateKey);
   const serializedTx = tx.serialize();

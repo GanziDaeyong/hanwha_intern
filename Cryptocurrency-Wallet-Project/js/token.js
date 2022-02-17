@@ -34,6 +34,9 @@ $("#_0601_button_autoload").click(function () {
 $("#_0604_button_load").click(function () {
   _AutoLoad();
 });
+$("#_0601_button_update").click(function () {
+  UpdateTokenBalance(2);
+});
 
 async function ValidateTokenCreateInfo(name, sym, totalsupply) {
   if (name == "" || !_isAlnum(name)) {
@@ -41,13 +44,22 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
     return;
   }
 
-  if (totalsupply <= 0.0 || !Number.isInteger(Number(totalsupply))) {
-    alert("Total Supply should be positive integer");
+  if (sym == "" || !_isAlnum(sym)) {
+    alert("Token symbol should not be empty, nor contain special letters");
     return;
   }
 
-  if (name == "" || sym == "" || totalsupply <= 0.0) {
-    alert(alertmsg);
+  // if (totalsupply <= 0.0 || !Number.isInteger(Number(totalsupply))) {
+  if (totalsupply <= 0.0 || isNaN(totalsupply) || totalsupply < 1e-18) {
+    alert("Total Supply should be positive number, between 1e-18 ~ 1e+18");
+    return;
+  }
+
+  // totalsupply *= 1e18; // Need to be converted, as Solidity contract's default is 18 decimal
+  const MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+
+  if (totalsupply * 1e18 > MAX_INT) {
+    alert("2^256-1 is the greatest number available");
     return;
   }
 
@@ -104,23 +116,33 @@ async function GetBytecodeAndDeploy() {
   const sym = text[2];
   let totalsupply = text[3];
 
-  totalsupply *= 1e18;
+  totalsupply *= 1e18; // Need to be converted, as Solidity contract's default is 18 decimal
+
+  const totalsupplyFixed = totalsupply.toLocaleString();
+  console.log(totalsupplyFixed);
 
   // Loading();
+
+  //115792089237316195423570985008687907853269984665640564039456
+  //115792089237316200000000000000000000000000000000000000000000000000000000000000
 
   const TokenCompileServer = "http://localhost:8080/api/v1/createtoken";
   // "http://115.85.181.243:8080/api/v1/createtoken"
 
   const response1 = await fetch(TokenCompileServer, {
     method: "POST",
-    body: JSON.stringify({ name: name, sym: sym, totalsupply: totalsupply }),
+    body: JSON.stringify({
+      name: name,
+      sym: sym,
+      totalsupply: totalsupplyFixed,
+    }),
   });
   const result1 = await response1.json();
   const bytecode = result1["bytecode"];
 
   UnLoading();
 
-  _Deployer(bytecode, name, sym, totalsupply);
+  _Deployer(bytecode, name, sym, totalsupplyFixed);
 }
 
 async function _Deployer(bytecode, name, sym, totalsupply) {
@@ -170,9 +192,12 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
       let msg =
         "<br><strong>Transaction Hash</strong><br>[" +
         txHash +
-        "]<br><br><strong>Url to Etherscan</strong><br>[" +
+        ']<br><br><strong>URL to Etherscan</strong><br><a href="' +
         toEtherscan +
-        "]";
+        '" target="_blank">click!</a><br>';
+      // "]<br><br><strong>Url to Etherscan</strong><br>[" +
+      // toEtherscan +
+      // "]";
       _SendMsg("_0602_3", msg);
 
       const txRecord = _TxBufferStruct(
@@ -181,7 +206,7 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
         txHash,
         fromAddress,
         toEtherscan,
-        totalsupply * 1e-18,
+        totalsupply,
         time
       );
       _TxBufferPush(txRecord);
@@ -252,7 +277,7 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
 //   });
 // }
 
-async function UpdateTokenBalance(zeroforgohome) {
+async function UpdateTokenBalance(zeroforgohometwoforalert) {
   Loading();
 
   const minABI = [
@@ -274,6 +299,8 @@ async function UpdateTokenBalance(zeroforgohome) {
     let tokenAddress = eachTokInfo[3];
     let contract = new web3.eth.Contract(minABI, tokenAddress);
     let balance = await contract.methods.balanceOf(fromAddress).call();
+    balance /= 1e18; // to ether decimal
+    balance = balance.toLocaleString();
     tokBalList.push(balance);
   }
   console.log(tokBalList);
@@ -286,7 +313,11 @@ async function UpdateTokenBalance(zeroforgohome) {
     chrome.storage.sync.set(obj, function () {
       console.log(obj);
       UnLoading();
-      if (zeroforgohome == 0) {
+      if (zeroforgohometwoforalert == 0) {
+        GoHome();
+      }
+      if (zeroforgohometwoforalert == 2) {
+        alert("Token Balances Updated");
         GoHome();
       }
     });
@@ -459,6 +490,7 @@ async function _AutoLoad() {
           break;
         }
       }
+      if (isDuplicate) continue;
       let tokInfo = [
         result["tokens"]["name"][i],
         result["tokens"]["sym"][i],

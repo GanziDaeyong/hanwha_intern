@@ -80,23 +80,23 @@ function _PutStorage(accountObj, isFirst) {
   });
 }
 
-async function _GetBalance_EtherAndToken(accountAddress) {
-  let res = "";
+// async function _GetBalance_EtherAndToken(accountAddress) {
+//   let res = "";
 
-  const getbalance = await web3.eth.getBalance(accountAddress);
-  const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
-  res += "eth: " + ethBal + "\n";
+//   const getbalance = await web3.eth.getBalance(accountAddress);
+//   const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
+//   res += "eth: " + ethBal + "\n";
 
-  const curr = await _GetCurr();
-  const tokList = curr["balance"];
+//   const curr = await _GetCurr();
+//   const tokList = curr["balance"];
 
-  for (let eachTokList of tokList) {
-    res += eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
-    res += "\n";
-  }
+//   for (let eachTokList of tokList) {
+//     res += eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
+//     res += "\n";
+//   }
 
-  return res;
-}
+//   return res;
+// }
 async function _GetBalance_EtherAndTokenTest(accountAddress) {
   let res = "";
 
@@ -110,11 +110,13 @@ async function _GetBalance_EtherAndTokenTest(accountAddress) {
   for (let eachTokList of tokList) {
     const linkToEtherscan =
       "https://ropsten.etherscan.io/token/" + eachTokList[3];
-    const a = '<a href="' + linkToEtherscan + '" target="_blank">';
+    const a = '<br><a href="' + linkToEtherscan + '" target="_blank">';
     const b = eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
-    const c = "</a><br/>";
+    const c = "</a>";
     res += a + b + c;
   }
+  res +=
+    "<br>* For the actual balance of each token, please visit Etherscan with provided link";
 
   return res;
 }

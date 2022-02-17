@@ -135,7 +135,8 @@ function _isAlnum(str) {
 // }
 
 async function LoadAccount(pk) {
-  if (_ValidatePk(pk) == "fail") {
+  pk = _ValidatePk(pk);
+  if (pk == "fail") {
     alert("invalid private key");
     return;
   }
@@ -185,7 +186,9 @@ async function LoadAccount(pk) {
 
 function ChangeName(name) {
   if (!_isAlnum(name)) {
-    alert("Name should be in alphabet or number");
+    alert(
+      "Name should not be an empty string, and it should be in alphabet or number"
+    );
     return;
   }
   chrome.storage.sync.get(null, function (obj) {
