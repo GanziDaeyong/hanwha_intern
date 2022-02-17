@@ -7,7 +7,6 @@ $("#_0301_button_create").click(function () {
 });
 
 $("#_0301_button_load").click(function () {
-  // _PutStorage(); // test
   _SendMsg("_0303");
 });
 $("#_0303_button_enter").click(function () {
@@ -22,7 +21,6 @@ $("#_0301_button_transition").click(function () {
 $("#_0304_button_enter").click(function () {
   let accIdx = $("#_0304_select_transition option:selected").val();
   AccountTransition(accIdx);
-  alert("Account Transition Succeeded");
 });
 
 $("#_0301_button_detail").click(function () {
@@ -217,8 +215,7 @@ function AccountTransition(idx) {
   chrome.storage.sync.get(null, function (obj) {
     obj["currAcc"] = idx;
     chrome.storage.sync.set(obj, function () {
-      console.log("Saved");
-      console.log(obj);
+      alert("Account Transition Succeeded");
     });
   });
 }

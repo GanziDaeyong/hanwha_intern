@@ -1,21 +1,19 @@
-/*
-	wallet.js
-
-	지갑 관련 로직을 담당한다.
-*/
-
-// Login - Create wallet with password
 $("#_0101_button_create").click(function () {
   let pw = $("#_0101_input_password").val();
   MakeAndSaveWallet(pw);
 });
 
-// Login - Log in with password
 $("#_0101_button_login").click(function () {
   let pw = $("#_0101_input_password").val();
   LoadWallet(pw);
 });
 
+
+/** 
+ * @async
+ * @function MakeAndSaveWallet
+ * @param {string} input password
+ */
 async function MakeAndSaveWallet(pw) {
   pw = await sha256(pw);
   console.log("->" + pw);
