@@ -73,6 +73,7 @@ function ChangeViewWithSelect(msg, data) {
 }
 
 function SyncView() {
+  console.log("Synchronizing...");
   if (cont != "default") {
     let views = chrome.extension.getViews({
       type: "popup",

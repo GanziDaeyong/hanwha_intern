@@ -126,7 +126,8 @@ async function GetBytecodeAndDeploy() {
   //115792089237316195423570985008687907853269984665640564039456
   //115792089237316200000000000000000000000000000000000000000000000000000000000000
 
-  const TokenCompileServer = "http://localhost:8080/api/v1/createtoken";
+  // const TokenCompileServer = "http://localhost:8080/api/v1/createtoken";
+  const TokenCompileServer = "http://115.85.181.243:8080/api/v1/createtoken";
   // "http://115.85.181.243:8080/api/v1/createtoken"
 
   const response1 = await fetch(TokenCompileServer, {
@@ -198,8 +199,13 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
       // "]<br><br><strong>Url to Etherscan</strong><br>[" +
       // toEtherscan +
       // "]";
-      _SendMsg("_0602_3", msg);
+      // totalsupply = Number(totalsupply) / 1e18;
+      // console.log(totalsupply);
+      // console.log(totalsupply);
+      totalsupply = totalsupply.replaceAll(",", "");
+      totalsupply = Number(totalsupply) / 1e18;
 
+      // console.log(parseInttotalsupply);
       const txRecord = _TxBufferStruct(
         "Token Creation",
         currency,
@@ -210,6 +216,7 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
         time
       );
       _TxBufferPush(txRecord);
+      _SendMsg("_0602_3", msg);
     });
   });
 }
@@ -419,7 +426,9 @@ async function _GetTokenFromServer() {
   const curr = await _GetCurr();
   const fromAddress = curr["address"];
 
-  const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  // const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  const CrawlingServerUrl =
+    "http://115.85.181.243:3000/api/address/" + fromAddress;
   const response = await fetch(CrawlingServerUrl);
 
   const result = await response.json();
@@ -475,7 +484,9 @@ async function _AutoLoad() {
   const curr = all["accList"][currIdx];
   const fromAddress = curr["address"];
 
-  const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  // const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;
+  const CrawlingServerUrl =
+    "http://115.85.181.243:3000/api/address/" + fromAddress;
   const response = await fetch(CrawlingServerUrl);
 
   const tokenList = curr["balance"];
