@@ -271,7 +271,6 @@ async function UpdateTokenBalance(zeroforgohometwoforalert) {
     let contract = new web3.eth.Contract(minABI, tokenAddress);
     let balance = await contract.methods.balanceOf(fromAddress).call();
     balance /= 1e18; // to ether decimal
-    balance = balance.toLocaleString().replaceAll(",", "");
     tokBalList.push(balance);
   }
   chrome.storage.sync.get(null, function (obj) {
@@ -280,7 +279,6 @@ async function UpdateTokenBalance(zeroforgohometwoforalert) {
       obj["accList"][currIdx]["balance"][i][2] = tokBalList[i];
     }
     chrome.storage.sync.set(obj, function () {
-      console.log(obj);
       UnLoading();
       if (zeroforgohometwoforalert == 0) {
         GoHome();
@@ -445,7 +443,7 @@ async function AutoLoad_Execute() {
   Loading();
   const all = await _GetAll();
   const currIdx = all["currAcc"];
-  const curr = all["accList"][currIdx];
+  const curr = await _GetCurr();
   const fromAddress = curr["address"];
 
   // const CrawlingServerUrl = "http://localhost:3000/api/address/" + fromAddress;

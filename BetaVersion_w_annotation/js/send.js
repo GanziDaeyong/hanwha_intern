@@ -25,7 +25,15 @@ async function AddOptionsForSend() {
   let options = "<option value=ether>ether</option>";
   for (let i = 0; i < tokList.length; i++) {
     options +=
-      "<option value=" + tokList[i][0] + ">" + tokList[i][0] + "</option>";
+      "<option value=" +
+      tokList[i][0] +
+      "/" +
+      tokList[i][3] +
+      ">" +
+      tokList[i][0] +
+      " (" +
+      tokList[i][3] +
+      ")</option>";
   }
   _SendMsg("_0401", options);
 }
@@ -134,6 +142,8 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
   const gasPrice = web3.utils.fromWei(web3.utils.toWei("30", "gwei"), "ether");
   const expected = gasPrice * gasLimit;
   const isEnoughEther = fromBalance > expected;
+  const currencyAddress = currency.split("/")[1];
+
   if (!isEnoughEther) {
     UnLoading();
     alert("ether not enough to pay transaction fee");
@@ -142,7 +152,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
 
   let tokBalance = 0;
   for (let eachTokList of tokList) {
-    if (eachTokList[0] == currency) {
+    if (eachTokList[3] == currencyAddress) {
       tokBalance = eachTokList[2];
       break;
     }
@@ -153,8 +163,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
     alert("not enough token");
     return;
   }
-
-  const total = amount + currency + " / " + expected + "eth";
+  const total = amountFixed + currency + " AND " + expected + "eth";
 
   alert("Validated");
   const msg =
@@ -186,7 +195,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
  */
 async function SendTx() {
   Loading();
-  const text = $("#screen").text();
+  let text = $("#screen").text();
   text = text.split("]");
   for (let i = 0; i < text.length; i++) {
     let idx = text[i].indexOf("[");
@@ -251,7 +260,7 @@ async function SendTx() {
         toEtherscan +
         "]";
       const txObj = _TxBufferStruct(
-        "send",
+        "send - ether",
         currencyName,
         txHash,
         fromAddress,
@@ -282,7 +291,8 @@ async function SendTok(
   amount,
   privateKey
 ) {
-  const tokenAddress = await _GetTokenAddress(currencyName);
+  Loading();
+  const tokenAddress = currencyName.split("/")[1];
 
   const abiArray = abi;
 
@@ -327,7 +337,7 @@ async function SendTok(
       toEtherscan +
       '" target="_blank">click!</a><br>';
     const txObj = _TxBufferStruct(
-      "send",
+      "send - token",
       currencyName,
       txHash,
       fromAddress,

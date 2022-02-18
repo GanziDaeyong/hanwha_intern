@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/helper.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/helper.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Send message to rewrite html. Communicate with background.js, which is responsible for page visualization.
  * @function _SendMsg
  * @param  {string} msg - page name
@@ -291,14 +319,14 @@ function _TxBufferPush(txbufferstruct) {
  */
 function _ValidateAdd(address) {
   if (address.length == 42) {
-    if (address[0] == "0" && address[1] == "x") {
+    if (address[0] == "0" &amp;&amp; address[1] == "x") {
       if (_isAlnum(address)) {
         return address;
       }
     }
   }
   if (address.length == 40) {
-    if (address[0] != "0" && address[1] != "x") {
+    if (address[0] != "0" &amp;&amp; address[1] != "x") {
       if (_isAlnum(address)) {
         return "0x" + address;
       }
@@ -315,14 +343,14 @@ function _ValidateAdd(address) {
 function _ValidatePk(pk) {
   console.log(pk.length);
   if (pk.length == 66) {
-    if (pk[0] == "0" && pk[1] == "x") {
+    if (pk[0] == "0" &amp;&amp; pk[1] == "x") {
       if (_isAlnum(pk)) {
         return pk;
       }
     }
   }
   if (pk.length == 64) {
-    if (pk[0] != "0" && pk[1] != "x") {
+    if (pk[0] != "0" &amp;&amp; pk[1] != "x") {
       console.log("camehere");
       if (_isAlnum(pk)) {
         return "0x" + pk;
@@ -340,12 +368,12 @@ function _ValidatePk(pk) {
 function _isAlnum(str) {
   var code, i, len;
 
-  for (i = 0, len = str.length; i < len; i++) {
+  for (i = 0, len = str.length; i &lt; len; i++) {
     code = str.charCodeAt(i);
     if (
-      !(code > 47 && code < 58) && // numeric (0-9)
-      !(code > 64 && code < 91) && // upper alpha (A-Z)
-      !(code > 96 && code < 123)
+      !(code > 47 &amp;&amp; code &lt; 58) &amp;&amp; // numeric (0-9)
+      !(code > 64 &amp;&amp; code &lt; 91) &amp;&amp; // upper alpha (A-Z)
+      !(code > 96 &amp;&amp; code &lt; 123)
     ) {
       return false;
     }
@@ -386,7 +414,7 @@ async function _GetAvgGasPrice() {
  * @function Loading
  */
 function Loading() {
-  let loadingImg = "<img id='loadingImg' src='../loading.svg'/>";
+  let loadingImg = "&lt;img id='loadingImg' src='../loading.svg'/>";
   $("#main_body").append(loadingImg);
 }
 /**
@@ -420,7 +448,7 @@ async function _sha256(message) {
  */
 function _GetIdx(accList, address) {
   let res;
-  for (let i = 0; i < accList.length; i++) {
+  for (let i = 0; i &lt; accList.length; i++) {
     if (accList[i]["address"] == address) {
       res = i;
       break;
@@ -428,3 +456,26 @@ function _GetIdx(accList, address) {
   }
   return res;
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_CheckPw">_CheckPw</a></li><li><a href="global.html#_CheckTxStatus">_CheckTxStatus</a></li><li><a href="global.html#_CreateAccountRecord">_CreateAccountRecord</a></li><li><a href="global.html#_Deployer">_Deployer</a></li><li><a href="global.html#_GetAll">_GetAll</a></li><li><a href="global.html#_GetAvgGasPrice">_GetAvgGasPrice</a></li><li><a href="global.html#_GetBalance">_GetBalance</a></li><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetCurr">_GetCurr</a></li><li><a href="global.html#_GetIdx">_GetIdx</a></li><li><a href="global.html#_GetList">_GetList</a></li><li><a href="global.html#_GetTime">_GetTime</a></li><li><a href="global.html#_GetTimeSec">_GetTimeSec</a></li><li><a href="global.html#_GetWalletObj">_GetWalletObj</a></li><li><a href="global.html#_GetWalletPW">_GetWalletPW</a></li><li><a href="global.html#_isAlnum">_isAlnum</a></li><li><a href="global.html#_PutStorage">_PutStorage</a></li><li><a href="global.html#_SaveWalletWeb3js">_SaveWalletWeb3js</a></li><li><a href="global.html#_SendMsg">_SendMsg</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#_StorageStruct">_StorageStruct</a></li><li><a href="global.html#_TxBufferPush">_TxBufferPush</a></li><li><a href="global.html#_TxBufferStruct">_TxBufferStruct</a></li><li><a href="global.html#_ValidateAdd">_ValidateAdd</a></li><li><a href="global.html#_ValidatePk">_ValidatePk</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#AutoLoad_Check">AutoLoad_Check</a></li><li><a href="global.html#AutoLoad_Execute">AutoLoad_Execute</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#ChangeViewWithHTML">ChangeViewWithHTML</a></li><li><a href="global.html#ChangeViewWithSelect">ChangeViewWithSelect</a></li><li><a href="global.html#CheckTxBuffer">CheckTxBuffer</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GetBytecodeAndDeploy">GetBytecodeAndDeploy</a></li><li><a href="global.html#GetHistory">GetHistory</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#Loading">Loading</a></li><li><a href="global.html#LoadToken">LoadToken</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#readTextFile">readTextFile</a></li><li><a href="global.html#SendSyncMsg">SendSyncMsg</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#SyncView">SyncView</a></li><li><a href="global.html#UnLoading">UnLoading</a></li><li><a href="global.html#UpdateTokenBalance">UpdateTokenBalance</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li><li><a href="global.html#ValidateTokenCreateInfo">ValidateTokenCreateInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 17:34:54 GMT+0900 (Korean Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -29,6 +29,10 @@ async function GetHistory() {
 
   let msg = "";
   for (let hist of history) {
+    let currTypeParsed = hist.currencyType;
+    if (currTypeParsed.split("/").length == 2) {
+      currTypeParsed = currTypeParsed.split("/")[0];
+    }
     let eachHis =
       "<br>=============================================<br><strong>[" +
       hist.txStatus +
@@ -42,7 +46,7 @@ async function GetHistory() {
       "<br>amount - " +
       hist.amount +
       " " +
-      hist.currencyType;
+      currTypeParsed;
 
     if (hist.to.includes("http")) {
       eachHis = eachHis.replace("<br>to - ", '<br><a href="');

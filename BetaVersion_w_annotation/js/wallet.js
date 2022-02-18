@@ -45,19 +45,3 @@ async function LoadWallet(pw) {
     }
   });
 }
-/**
- * sha256 for hashing password
- * @async
- * @function _sha256
- * @param  {string} message - string that should be hashed
- * @returns {string} hashed result
- */
-async function _sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-}

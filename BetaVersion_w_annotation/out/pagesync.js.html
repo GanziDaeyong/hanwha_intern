@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: pagesync.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,30 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: pagesync.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let alreadysynced = 0;
+if (alreadysynced == 0) {
+  SendSyncMsg();
+}
+/**
+ * Send message to backgroundjs to let page synced
+ * @function SendSyncMsg
+ */
+function SendSyncMsg() {
+  chrome.runtime.sendMessage({ msg: "syncpage" });
+  alreadysynced = 1;
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
