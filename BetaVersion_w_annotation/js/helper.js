@@ -193,10 +193,11 @@ function _SaveWalletWeb3js() {
   });
 }
 
-async function _GetWalletObj(pw) {
-  pw = await _sha256(pw);
+async function _GetWalletObj(isCorrect, pw) {
+  if (isCorrect != "correct") {
+    pw = await _sha256(pw);
+  }
   const walletobj = web3.eth.accounts.wallet.load(pw);
-  console.log(walletobj);
   return walletobj;
 }
 function _TxBufferStruct(txType, currencyType, txHash, from, to, amount, time) {
@@ -309,4 +310,49 @@ async function _GetTokenAddress(currency) {
     }
   }
   return tokAddress;
+}
+
+function Loading() {
+  let loadingImg = "<img id='loadingImg' src='../loading.svg'/>";
+  $("#main_body").append(loadingImg);
+  console.log(document.getElementById("main_body").innerHTML);
+}
+function UnLoading() {
+  // $("#main_body").remove("#loadingImg");
+  $("#loadingImg").remove();
+
+  console.log(document.getElementById("main_body").innerHTML);
+}
+/**
+ * sha256 for hashing password
+ * @async
+ * @function _sha256
+ * @param  {string} message - string that should be hashed
+ * @returns {string} hashed result
+ */
+async function _sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
+}
+
+/**
+ * Get index of given address.
+ * @function _GetIdx
+ * @param  {list} accList - list of account objects from extension storage.
+ * @param  {string} address - account address to match from accList.
+ */
+function _GetIdx(accList, address) {
+  let res;
+  for (let i = 0; i < accList.length; i++) {
+    if (accList[i]["address"] == address) {
+      res = i;
+      break;
+    }
+  }
+  return res;
 }

@@ -1,4 +1,32 @@
-$("#_0201_button_token").click(function () {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: token.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: token.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>$("#_0201_button_token").click(function () {
   _SendMsg("_0601");
 });
 $("#_0201_button_tokenbalance").click(function () {
@@ -55,7 +83,7 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
     return;
   }
 
-  if (totalsupply <= 0.0 || isNaN(totalsupply) || totalsupply < 1e-18) {
+  if (totalsupply &lt;= 0.0 || isNaN(totalsupply) || totalsupply &lt; 1e-18) {
     alert(
       "[ERROR] Total Supply should be positive number, between 1e-18 ~ 1e+18"
     );
@@ -81,7 +109,7 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
   const gasPrice = "0.00000008";
   const total = Number(gasLimit) * Number(gasPrice);
 
-  const isBalanceEnough = parseFloat(total) <= parseFloat(fromBalance);
+  const isBalanceEnough = parseFloat(total) &lt;= parseFloat(fromBalance);
   if (!isBalanceEnough) {
     alert("ERROR] Not enough balance");
     return;
@@ -89,19 +117,19 @@ async function ValidateTokenCreateInfo(name, sym, totalsupply) {
 
   alert("Validated");
   const msg =
-    "<br><strong>Creator Address</strong><br>[" +
+    "&lt;br>&lt;strong>Creator Address&lt;/strong>&lt;br>[" +
     fromAddress +
-    "]<br><br><strong>Token Name</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Token Name&lt;/strong>&lt;br>[" +
     name +
-    "]<br><br><strong>Token Symbol</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Token Symbol&lt;/strong>&lt;br>[" +
     sym +
-    "]<br><br><strong>Total Supply</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Total Supply&lt;/strong>&lt;br>[" +
     totalsupply.toLocaleString() +
-    "]<br><br><strong>Gas Price</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Price&lt;/strong>&lt;br>[" +
     gasPrice.toLocaleString() +
-    "]<br><br><strong>Gas Limit</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Limit&lt;/strong>&lt;br>[" +
     gasLimit +
-    "]<br><br><strong>Max Amount</strong>(can be spent at most)<br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Max Amount&lt;/strong>(can be spent at most)&lt;br>[" +
     total.toLocaleString() +
     " ether]";
   _SendMsg("_0602_2", msg);
@@ -120,7 +148,7 @@ async function GetBytecodeAndDeploy() {
 
   let text = $("#screen").text();
   text = text.split("]");
-  for (let i = 0; i < text.length; i++) {
+  for (let i = 0; i &lt; text.length; i++) {
     let idx = text[i].indexOf("[");
     text[i] = text[i].substring(idx + 1);
   }
@@ -221,11 +249,11 @@ async function _Deployer(bytecode, name, sym, totalsupply) {
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
 
       let msg =
-        "<br><strong>Transaction Hash</strong><br>[" +
+        "&lt;br>&lt;strong>Transaction Hash&lt;/strong>&lt;br>[" +
         txHash +
-        ']<br><br><strong>URL to Etherscan</strong><br><a href="' +
+        ']&lt;br>&lt;br>&lt;strong>URL to Etherscan&lt;/strong>&lt;br>&lt;a href="' +
         toEtherscan +
-        '" target="_blank">click!</a><br>';
+        '" target="_blank">click!&lt;/a>&lt;br>';
 
       totalsupply = Number(totalsupply) / 1e18;
       totalsupply = totalsupply.toLocaleString().replaceAll(",", "");
@@ -276,7 +304,7 @@ async function UpdateTokenBalance(zeroforgohometwoforalert) {
   }
   chrome.storage.sync.get(null, function (obj) {
     const currIdx = obj["currAcc"];
-    for (let i = 0; i < obj["accList"][currIdx]["balance"].length; i++) {
+    for (let i = 0; i &lt; obj["accList"][currIdx]["balance"].length; i++) {
       obj["accList"][currIdx]["balance"][i][2] = tokBalList[i];
     }
     chrome.storage.sync.set(obj, function () {
@@ -365,13 +393,13 @@ async function LoadToken(tokenAddress) {
 
     chrome.storage.sync.set(obj, function () {
       const msg =
-        "<br><strong>Token Address</strong><br>[" +
+        "&lt;br>&lt;strong>Token Address&lt;/strong>&lt;br>[" +
         tokenAddress +
-        "]<br><br><strong>Token Name</strong><br>[" +
+        "]&lt;br>&lt;br>&lt;strong>Token Name&lt;/strong>&lt;br>[" +
         name +
-        "]<br><br><strong>Token Symbol</strong><br>[" +
+        "]&lt;br>&lt;br>&lt;strong>Token Symbol&lt;/strong>&lt;br>[" +
         sym +
-        "]<br><br><strong>Token Balance</strong><br>[" +
+        "]&lt;br>&lt;br>&lt;strong>Token Balance&lt;/strong>&lt;br>[" +
         balance +
         "]";
       UnLoading();
@@ -407,7 +435,7 @@ async function AutoLoad_Check() {
 
   const tokenList = curr["balance"];
 
-  for (let i = 0; i < result["tokens"]["name"].length; i++) {
+  for (let i = 0; i &lt; result["tokens"]["name"].length; i++) {
     let isDuplicate = false;
     for (let eachTokInfo of tokenList) {
       if (eachTokInfo[3] == result["tokens"]["link"][i]) {
@@ -417,7 +445,7 @@ async function AutoLoad_Check() {
     }
     if (isDuplicate) continue;
     const comb =
-      "<br>" +
+      "&lt;br>" +
       result["tokens"]["name"][i] +
       " (" +
       result["tokens"]["sym"][i] +
@@ -432,7 +460,7 @@ async function AutoLoad_Check() {
     _SendMsg("_0601", msg);
     return;
   }
-  msg += "<br><br>will be loaded to your account";
+  msg += "&lt;br>&lt;br>will be loaded to your account";
   UnLoading();
   _SendMsg("_0604", msg);
 }
@@ -457,7 +485,7 @@ async function AutoLoad_Execute() {
 
   const result = await response.json();
   chrome.storage.sync.get(null, function (obj) {
-    for (let i = 0; i < result["tokens"]["name"].length; i++) {
+    for (let i = 0; i &lt; result["tokens"]["name"].length; i++) {
       let isDuplicate = false;
       for (let eachTokInfo of tokenList) {
         if (eachTokInfo[3] == result["tokens"]["link"][i]) {
@@ -480,3 +508,26 @@ async function AutoLoad_Execute() {
     });
   });
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_Deployer">_Deployer</a></li><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetTokenAddress">_GetTokenAddress</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#AutoLoad_Check">AutoLoad_Check</a></li><li><a href="global.html#AutoLoad_Execute">AutoLoad_Execute</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GetBytecodeAndDeploy">GetBytecodeAndDeploy</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#LoadToken">LoadToken</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#UpdateTokenBalance">UpdateTokenBalance</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li><li><a href="global.html#ValidateTokenCreateInfo">ValidateTokenCreateInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 15:18:35 GMT+0900 (Korean Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,7 +1,6 @@
 $("#_0201_button_send").click(function () {
   AddOptionsForSend();
 });
-
 $("#_0401_button_validate").click(function () {
   const currency = $("#_0401_select_transition option:selected").val();
   const toAddress = $("#_0401_input_receipient").val();
@@ -12,11 +11,9 @@ $("#_0401_button_validate").click(function () {
     ValidateSendInfo_Token(toAddress, amount, currency);
   }
 });
-
 $("#_0402_button_confirm").click(function () {
   SendTx();
 });
-
 /**
  * Provide list of currency types (that would be chosen as currency type for remitting)
  * @async
@@ -32,7 +29,6 @@ async function AddOptionsForSend() {
   }
   _SendMsg("_0401", options);
 }
-
 /**
  * Validate information of Send Ether
  * @async
@@ -100,7 +96,6 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
     "]";
   _SendMsg("_0402", msg);
 }
-
 /**
  * Validate information of Send Token
  * @async
@@ -184,7 +179,6 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
 
   _SendMsg("_0402", msg);
 }
-
 /**
  * Send transaction (Send Ether) with validated data
  * @async
@@ -205,7 +199,7 @@ async function SendTx() {
   const gasPrice = text[4];
 
   const walletpw = await _GetWalletPW();
-  const walletobj = await _GetWalletObj(walletpw);
+  const walletobj = await _GetWalletObj("correct", walletpw);
   let pk = walletobj[fromAddress].privateKey;
   pk = pk.substring(2);
   const privateKey = Buffer.from(pk, "hex");
@@ -271,7 +265,6 @@ async function SendTx() {
     });
   });
 }
-
 /**
  * Send transcation (Send Token) with validated data
  * @async

@@ -1,11 +1,9 @@
 $("#_home").click(function () {
   GoHome();
 });
-
 $("#contact").click(function () {
   _SendMsg("dev");
 });
-
 /**
  * Go to home page
  * @async
@@ -37,7 +35,6 @@ async function GoHome() {
     _SendMsg("_0201_2");
   }
 }
-
 /**
  * Get current account's ether and token balances
  * @async

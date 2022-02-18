@@ -2,12 +2,10 @@ $("#_0101_button_create").click(function () {
   let pw = $("#_0101_input_password").val();
   MakeAndSaveWallet(pw);
 });
-
 $("#_0101_button_login").click(function () {
   let pw = $("#_0101_input_password").val();
   LoadWallet(pw);
 });
-
 /**
  * Make new wallet and save it to (1) web3js's local storage (2) chrome extension storage
  * @async

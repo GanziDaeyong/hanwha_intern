@@ -139,7 +139,7 @@ async function AddOptionsForAccountTransition() {
 /**
  * Change current account to the given index
  * @function AccountTransition
- * @param  {string} idx - index of account amongst accounts list provided by function AddOptionsForAccountTransition
+ * @param  {number} idx - index of account amongst accounts list provided by function AddOptionsForAccountTransition
  */
 function AccountTransition(idx) {
   chrome.storage.sync.get(null, function (obj) {
@@ -165,7 +165,7 @@ async function AccountDetail(pw) {
   const curr = await _GetCurr();
   const currAddress = curr["address"];
   const currName = curr["name"];
-  const walletobj = await _GetWalletObj(pw);
+  const walletobj = await _GetWalletObj("checkneeded", pw);
   const currPK = walletobj[currAddress].privateKey;
   let msg =
     "<br><strong>Name</strong><br>[" +

@@ -104,6 +104,212 @@
     
 
     
+    <h4 class="name" id="_Deployer"><span class="type-signature">(async) </span>_Deployer<span class="signature">(bytecode, name, sym, totalsupply)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deploy token contract. Have same logic with sending transaction
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>bytecode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">bytecode from token compiling server</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">token name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sym</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">token symbol</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalsupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">total supply of token</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="_GetBalance_EtherAndToken"><span class="type-signature">(async) </span>_GetBalance_EtherAndToken<span class="signature">(currObj)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
@@ -360,7 +566,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line296">line 296</a>
+        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line297">line 297</a>
     </li></ul></dd>
     
 
@@ -1005,6 +1211,182 @@
     
 
     
+    <h4 class="name" id="AutoLoad_Check"><span class="type-signature">(async) </span>AutoLoad_Check<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Check if user will load all the tokens that belong to the account
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line382">line 382</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="AutoLoad_Execute"><span class="type-signature">(async) </span>AutoLoad_Execute<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Load all the tokens, except for the ones already imported. Basically works same as AutoLoad_Check()
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line439">line 439</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="ChangeName"><span class="type-signature"></span>ChangeName<span class="signature">(name)</span><span class="type-signature"></span></h4>
     
 
@@ -1230,6 +1612,94 @@
     
 
     
+    <h4 class="name" id="GetBytecodeAndDeploy"><span class="type-signature">(async) </span>GetBytecodeAndDeploy<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Based on validated data, get bytecode from Token Compiling Server then call deploy method
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="GoHome"><span class="type-signature">(async) </span>GoHome<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1420,6 +1890,143 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="account.js.html">account.js</a>, <a href="account.js.html#line56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="LoadToken"><span class="type-signature">(async) </span>LoadToken<span class="signature">(tokenAddress)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Load single token to current account.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tokenAddress</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">token address to load</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line295">line 295</a>
     </li></ul></dd>
     
 
@@ -2046,6 +2653,143 @@
     
 
     
+    <h4 class="name" id="UpdateTokenBalance"><span class="type-signature">(async) </span>UpdateTokenBalance<span class="signature">(zeroforgohometwoforalert)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update all the token balance.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>zeroforgohometwoforalert</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">after updating, whether to go home or make alert or do nothing</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line247">line 247</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="ValidateSendInfo_Ether"><span class="type-signature">(async) </span>ValidateSendInfo_Ether<span class="signature">(toAddress, amount)</span><span class="type-signature"></span></h4>
     
 
@@ -2384,6 +3128,189 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="ValidateTokenCreateInfo"><span class="type-signature">(async) </span>ValidateTokenCreateInfo<span class="signature">(name, sym, totalsupply)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Validate token create information
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">token name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sym</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">token symbol</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalsupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">total supply of token</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="token.js.html">token.js</a>, <a href="token.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -2399,13 +3326,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetTokenAddress">_GetTokenAddress</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_Deployer">_Deployer</a></li><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetTokenAddress">_GetTokenAddress</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#AutoLoad_Check">AutoLoad_Check</a></li><li><a href="global.html#AutoLoad_Execute">AutoLoad_Execute</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GetBytecodeAndDeploy">GetBytecodeAndDeploy</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#LoadToken">LoadToken</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#UpdateTokenBalance">UpdateTokenBalance</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li><li><a href="global.html#ValidateTokenCreateInfo">ValidateTokenCreateInfo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 13:28:11 GMT+0900 (Korean Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 15:18:35 GMT+0900 (Korean Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
