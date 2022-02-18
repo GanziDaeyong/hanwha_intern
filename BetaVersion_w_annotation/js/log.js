@@ -29,7 +29,7 @@ async function GetHistory() {
   let msg = "";
   for (let hist of history) {
     let eachHis =
-      "<br>===============================================<br><strong>[" +
+      "<br>=============================================<br><strong>[" +
       hist.txStatus +
       "]</strong>" +
       "<br>time - " +
@@ -114,10 +114,4 @@ async function CheckTxBuffer() {
       console.log(obj);
     });
   }
-  // if (txBuf.length != 0 && PENDING_NUM === 0) {
-  //   obj["txbuf"] = [];
-  //   chrome.storage.sync.set(obj, function () {
-  //     console.log("TxBuffer Emptied");
-  //   });
-  // }
 }

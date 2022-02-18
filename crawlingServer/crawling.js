@@ -4,9 +4,22 @@ import cheerio from "cheerio";
 export const crawl = async (accountAddress, res) => {
   let url =
     "https://ropsten.etherscan.io/address/" + accountAddress + "#tokentxns";
+  // "ropsten.etherscan.io/address/" + accountAddress + "#tokentxns";
   console.log(url);
-  const html = await axios.get(url);
-  //   console.log(html.data);
+
+  let html;
+  try {
+    html = await axios.get(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  console.log(html.data);
   let $;
   try {
     $ = cheerio.load(html.data);

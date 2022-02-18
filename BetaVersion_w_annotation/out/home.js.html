@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: wallet.js</title>
+    <title>JSDoc: Source: home.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: wallet.js</h1>
+    <h1 class="page-title">Source: home.js</h1>
 
     
 
@@ -26,70 +26,73 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>$("#_0101_button_create").click(function () {
-  let pw = $("#_0101_input_password").val();
-  MakeAndSaveWallet(pw);
+            <pre class="prettyprint source linenums"><code>$("#_home").click(function () {
+  GoHome();
 });
 
-$("#_0101_button_login").click(function () {
-  let pw = $("#_0101_input_password").val();
-  LoadWallet(pw);
+$("#contact").click(function () {
+  _SendMsg("dev");
 });
 
 /**
- * Make new wallet and save it to (1) web3js's local storage (2) chrome extension storage
+ * Go to home page
  * @async
- * @function MakeAndSaveWallet
- * @param {string} pw - password to be set
+ * @function GoHome
  */
-async function MakeAndSaveWallet(pw) {
-  pw = await _sha256(pw);
-  web3.eth.accounts.wallet.clear();
-  web3.eth.accounts.wallet.create(0, "randomstring");
-  await chrome.storage.sync.clear();
+async function GoHome() {
+  try {
+    Loading();
+    const curr = await _GetCurr();
+    const address = curr["address"];
+    const name = curr["name"];
+    CheckTxBuffer();
 
-  if (web3.eth.accounts.wallet.save(pw)) {
-    const saveinfo = _StorageStruct(pw);
-    chrome.storage.sync.set(saveinfo, function () {
-      GoHome();
+    _GetBalance_EtherAndToken(curr).then((result) => {
+      let msg =
+        "&lt;br>&lt;strong>Current Account:&lt;/strong>&lt;br>" +
+        name +
+        "&lt;br>&lt;br>&lt;strong>Account Address:&lt;/strong>&lt;br>" +
+        address +
+        "&lt;br>&lt;br>&lt;strong>Account Balance:&lt;/strong>&lt;br>" +
+        result;
+      UnLoading();
+
+      _SendMsg("_0201", msg);
     });
-  } else {
-    alert("[ERROR] Wallet not created. Please try later.");
+  } catch (err) {
+    console.log(err);
+    UnLoading();
+    _SendMsg("_0201_2");
   }
 }
+
 /**
- * Load existing wallet
+ * Get current account's ether and token balances
  * @async
- * @function LoadWallet
- * @param  {string} pw - password of the wallet
+ * @function _GetBalance_EtherAndToken
+ * @param  {object} currObj - current account's object
+ * @returns {string} current account's balance information in string
  */
-async function LoadWallet(pw) {
-  pw = await _sha256(pw);
-  console.log(pw);
-  chrome.storage.sync.get(null, function (res) {
-    console.log(res);
-    if (res["walletpw"] != undefined &amp;&amp; res["walletpw"] == pw) {
-      GoHome();
-    } else {
-      alert("[ERROR] Invalid password.");
-    }
-  });
-}
-/**
- * sha256 for hashing password
- * @async
- * @function _sha256
- * @param  {string} message - string that should be hashed
- * @returns {string} hashed result
- */
-async function _sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
+async function _GetBalance_EtherAndToken(currObj) {
+  const accountAddress = currObj["address"];
+  const tokList = currObj["balance"];
+
+  let res = "";
+  const getbalance = await web3.eth.getBalance(accountAddress);
+  const ethBal = String(web3.utils.fromWei(getbalance, "ether"));
+  res += "eth: " + ethBal + "&lt;br>";
+
+  for (let eachTokList of tokList) {
+    const linkToEtherscan =
+      "https://ropsten.etherscan.io/token/" + eachTokList[3];
+    const a = '&lt;br>&lt;a href="' + linkToEtherscan + '" target="_blank">';
+    const b = eachTokList[0] + "(" + eachTokList[1] + "): " + eachTokList[2];
+    const c = "&lt;/a>";
+    res += a + b + c;
+  }
+  res +=
+    "&lt;br>* For the actual balance of each token, please visit Etherscan with provided link";
+  return res;
 }
 </code></pre>
         </article>

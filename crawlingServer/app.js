@@ -7,7 +7,7 @@ import cors from "cors";
 let app = express();
 
 // 3000 포트로 서버 오픈
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log("start! express server on port 3000");
 });
 

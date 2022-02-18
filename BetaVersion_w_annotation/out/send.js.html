@@ -1,4 +1,32 @@
-$("#_0201_button_send").click(function () {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: send.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: send.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>$("#_0201_button_send").click(function () {
   AddOptionsForSend();
 });
 
@@ -25,10 +53,10 @@ $("#_0402_button_confirm").click(function () {
 async function AddOptionsForSend() {
   const curr = await _GetCurr();
   const tokList = curr["balance"];
-  let options = "<option value=ether>ether</option>";
-  for (let i = 0; i < tokList.length; i++) {
+  let options = "&lt;option value=ether>ether&lt;/option>";
+  for (let i = 0; i &lt; tokList.length; i++) {
     options +=
-      "<option value=" + tokList[i][0] + ">" + tokList[i][0] + "</option>";
+      "&lt;option value=" + tokList[i][0] + ">" + tokList[i][0] + "&lt;/option>";
   }
   _SendMsg("_0401", options);
 }
@@ -61,7 +89,7 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
 
   const MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
 
-  if (isNaN(amount) || amount <= 0.0 || amount < 1e-18 || amount > MAX_INT) {
+  if (isNaN(amount) || amount &lt;= 0.0 || amount &lt; 1e-18 || amount > MAX_INT) {
     alert("Amount should be positive number, between 1e-18 ~ 1e+77");
     return;
   }
@@ -73,7 +101,7 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
   const expected = gasPrice * gasLimit;
   const total = parseFloat(amount) + parseFloat(expected);
 
-  const isBalanceEnough = parseFloat(total) <= parseFloat(fromBalance);
+  const isBalanceEnough = parseFloat(total) &lt;= parseFloat(fromBalance);
   if (!isBalanceEnough) {
     alert("Not enough balance");
     return;
@@ -82,20 +110,20 @@ async function ValidateSendInfo_Ether(toAddress, amount) {
   alert("Validated");
 
   const msg =
-    "<br><strong>Currency Type</strong><br>[ether" +
-    "]<br><br><strong>Sender Address</strong><br>[" +
+    "&lt;br>&lt;strong>Currency Type&lt;/strong>&lt;br>[ether" +
+    "]&lt;br>&lt;br>&lt;strong>Sender Address&lt;/strong>&lt;br>[" +
     fromAddress +
-    "]<br><br><strong>Receipient Address</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Receipient Address&lt;/strong>&lt;br>[" +
     toAddress +
-    "]<br><br><strong>Amount</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Amount&lt;/strong>&lt;br>[" +
     amountFixed +
-    "]<br><br><strong>Gas Price</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Price&lt;/strong>&lt;br>[" +
     gasPrice +
-    "]<br><br><strong>Gas Limit</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Limit&lt;/strong>&lt;br>[" +
     gasLimit +
-    "]<br><br><strong>Maximum Gas That Can Be Spent</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Maximum Gas That Can Be Spent&lt;/strong>&lt;br>[" +
     expected +
-    "]<br><br><strong>Total Amount</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Total Amount&lt;/strong>&lt;br>[" +
     total +
     "]";
   _SendMsg("_0402", msg);
@@ -123,7 +151,7 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
 
   const MAX_INT = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
 
-  if (isNaN(amount) || amount <= 0.0 || amount < 1e-18 || amount > MAX_INT) {
+  if (isNaN(amount) || amount &lt;= 0.0 || amount &lt; 1e-18 || amount > MAX_INT) {
     alert("Amount should be positive number, between 1e-18 ~ 1e+77");
     UnLoading();
     return;
@@ -163,21 +191,21 @@ async function ValidateSendInfo_Token(toAddress, amount, currency) {
 
   alert("Validated");
   const msg =
-    "<br><strong>Currency Type</strong><br>[" +
+    "&lt;br>&lt;strong>Currency Type&lt;/strong>&lt;br>[" +
     currency +
-    "]<br><br><strong>Sender Address</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Sender Address&lt;/strong>&lt;br>[" +
     fromAddress +
-    "]<br><br><strong>Receipient Address</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Receipient Address&lt;/strong>&lt;br>[" +
     toAddress +
-    "]<br><br><strong>Amount</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Amount&lt;/strong>&lt;br>[" +
     amountFixed +
-    "]<br><br><strong>Gas Price</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Price&lt;/strong>&lt;br>[" +
     gasPrice +
-    "]<br><br><strong>Gas Limit</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Gas Limit&lt;/strong>&lt;br>[" +
     gasLimit +
-    "]<br><br><strong>Maximum Gas That Can Be Spent</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>Maximum Gas That Can Be Spent&lt;/strong>&lt;br>[" +
     expected +
-    "]<br><br><strong>total amount</strong><br>[" +
+    "]&lt;br>&lt;br>&lt;strong>total amount&lt;/strong>&lt;br>[" +
     total +
     "]";
   UnLoading();
@@ -194,7 +222,7 @@ async function SendTx() {
   Loading();
   const text = $("#screen").text();
   text = text.split("]");
-  for (let i = 0; i < text.length; i++) {
+  for (let i = 0; i &lt; text.length; i++) {
     let idx = text[i].indexOf("[");
     text[i] = text[i].substring(idx + 1);
   }
@@ -251,9 +279,9 @@ async function SendTx() {
       const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
       const time = _GetTimeSec();
       let msg =
-        "<br><strong>Transaction Hash</strong><br>[" +
+        "&lt;br>&lt;strong>Transaction Hash&lt;/strong>&lt;br>[" +
         txHash +
-        "]<br><br><strong>Url To Etherscan</strong><br>[" +
+        "]&lt;br>&lt;br>&lt;strong>Url To Etherscan&lt;/strong>&lt;br>[" +
         toEtherscan +
         "]";
       const txObj = _TxBufferStruct(
@@ -328,11 +356,11 @@ async function SendTok(
     const toEtherscan = "https://ropsten.etherscan.io/tx/" + txHash;
     const time = _GetTimeSec();
     const msg =
-      "<br><strong>Transaction Hash</strong><br>[" +
+      "&lt;br>&lt;strong>Transaction Hash&lt;/strong>&lt;br>[" +
       txHash +
-      ']<br><br><strong>URL to Etherscan</strong><br><a href="' +
+      ']&lt;br>&lt;br>&lt;strong>URL to Etherscan&lt;/strong>&lt;br>&lt;a href="' +
       toEtherscan +
-      '" target="_blank">click!</a><br>';
+      '" target="_blank">click!&lt;/a>&lt;br>';
     const txObj = _TxBufferStruct(
       "send",
       currencyName,
@@ -347,3 +375,26 @@ async function SendTok(
     _SendMsg("_0402_2", msg);
   });
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetTokenAddress">_GetTokenAddress</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 13:28:10 GMT+0900 (Korean Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
