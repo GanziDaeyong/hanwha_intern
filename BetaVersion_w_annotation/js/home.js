@@ -4,6 +4,11 @@ $("#_home").click(function () {
 $("#contact").click(function () {
   _SendMsg("dev");
 });
+$("#_dev_button_enter").click(function () {
+  const msg = $("#feedback").val();
+  SendFeedback(msg);
+});
+
 /**
  * Go to home page
  * @async
@@ -62,4 +67,35 @@ async function _GetBalance_EtherAndToken(currObj) {
   res +=
     "<br>* For the actual balance of each token, please visit Etherscan with provided link";
   return res;
+}
+
+async function SendFeedback(msg) {
+  // const FeedbackEndpoint = "http://115.85.181.243:8080/api/v1/createtoken";
+  const FeedbackEndpoint = "http://localhost:3000/api/feedback";
+  Loading();
+  try {
+    const response = await fetch(FeedbackEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        msg: msg,
+      }),
+    });
+    // const result = await response.json();
+    if (response.status == 200) {
+      alert("Feedback Sent!");
+      UnLoading();
+      return;
+    } else {
+      alert("[ERROR] Unknown error occurred while sending email.");
+      UnLoading();
+      return;
+    }
+  } catch (err) {
+    alert("[ERROR] Unknown error occurred with network or email-server.");
+    UnLoading();
+    return;
+  }
 }

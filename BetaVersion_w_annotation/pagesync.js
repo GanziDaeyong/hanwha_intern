@@ -8,5 +8,6 @@ if (alreadysynced == 0) {
  */
 function SendSyncMsg() {
   chrome.runtime.sendMessage({ msg: "syncpage" });
+  chrome.runtime.sendMessage({ msg: "syncpage" });
   alreadysynced = 1;
 }
