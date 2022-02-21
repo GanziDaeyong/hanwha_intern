@@ -32,6 +32,11 @@
 $("#contact").click(function () {
   _SendMsg("dev");
 });
+$("#_dev_button_enter").click(function () {
+  const msg = $("#feedback").val();
+  SendFeedback(msg);
+});
+
 /**
  * Go to home page
  * @async
@@ -91,6 +96,42 @@ async function _GetBalance_EtherAndToken(currObj) {
     "&lt;br>* For the actual balance of each token, please visit Etherscan with provided link";
   return res;
 }
+/**
+ * Send feedback to developer
+ * @async
+ * @function SendFeedback
+ * @param  {string} msg - content of feedback
+ */
+async function SendFeedback(msg) {
+  const FeedbackEndpoint = "http://115.85.181.243:3000/api/feedback";
+  // const FeedbackEndpoint = "http://localhost:3000/api/feedback";
+  Loading();
+  try {
+    const response = await fetch(FeedbackEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        msg: msg,
+      }),
+    });
+    // const result = await response.json();
+    if (response.status == 200) {
+      alert("Feedback Sent!");
+      UnLoading();
+      return;
+    } else {
+      alert("[ERROR] Unknown error occurred while sending email.");
+      UnLoading();
+      return;
+    }
+  } catch (err) {
+    alert("[ERROR] Unknown error occurred with network or email-server.");
+    UnLoading();
+    return;
+  }
+}
 </code></pre>
         </article>
     </section>
@@ -101,13 +142,13 @@ async function _GetBalance_EtherAndToken(currObj) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_CheckPw">_CheckPw</a></li><li><a href="global.html#_CheckTxStatus">_CheckTxStatus</a></li><li><a href="global.html#_CreateAccountRecord">_CreateAccountRecord</a></li><li><a href="global.html#_Deployer">_Deployer</a></li><li><a href="global.html#_GetAll">_GetAll</a></li><li><a href="global.html#_GetAvgGasPrice">_GetAvgGasPrice</a></li><li><a href="global.html#_GetBalance">_GetBalance</a></li><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetCurr">_GetCurr</a></li><li><a href="global.html#_GetIdx">_GetIdx</a></li><li><a href="global.html#_GetList">_GetList</a></li><li><a href="global.html#_GetTime">_GetTime</a></li><li><a href="global.html#_GetTimeSec">_GetTimeSec</a></li><li><a href="global.html#_GetWalletObj">_GetWalletObj</a></li><li><a href="global.html#_GetWalletPW">_GetWalletPW</a></li><li><a href="global.html#_isAlnum">_isAlnum</a></li><li><a href="global.html#_PutStorage">_PutStorage</a></li><li><a href="global.html#_SaveWalletWeb3js">_SaveWalletWeb3js</a></li><li><a href="global.html#_SendMsg">_SendMsg</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#_StorageStruct">_StorageStruct</a></li><li><a href="global.html#_TxBufferPush">_TxBufferPush</a></li><li><a href="global.html#_TxBufferStruct">_TxBufferStruct</a></li><li><a href="global.html#_ValidateAdd">_ValidateAdd</a></li><li><a href="global.html#_ValidatePk">_ValidatePk</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#AutoLoad_Check">AutoLoad_Check</a></li><li><a href="global.html#AutoLoad_Execute">AutoLoad_Execute</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#ChangeViewWithHTML">ChangeViewWithHTML</a></li><li><a href="global.html#ChangeViewWithSelect">ChangeViewWithSelect</a></li><li><a href="global.html#CheckTxBuffer">CheckTxBuffer</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GetBytecodeAndDeploy">GetBytecodeAndDeploy</a></li><li><a href="global.html#GetHistory">GetHistory</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#Loading">Loading</a></li><li><a href="global.html#LoadToken">LoadToken</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#readTextFile">readTextFile</a></li><li><a href="global.html#SendSyncMsg">SendSyncMsg</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#SyncView">SyncView</a></li><li><a href="global.html#UnLoading">UnLoading</a></li><li><a href="global.html#UpdateTokenBalance">UpdateTokenBalance</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li><li><a href="global.html#ValidateTokenCreateInfo">ValidateTokenCreateInfo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_CheckPw">_CheckPw</a></li><li><a href="global.html#_CheckTxStatus">_CheckTxStatus</a></li><li><a href="global.html#_CreateAccountRecord">_CreateAccountRecord</a></li><li><a href="global.html#_Deployer">_Deployer</a></li><li><a href="global.html#_GetAll">_GetAll</a></li><li><a href="global.html#_GetAvgGasPrice">_GetAvgGasPrice</a></li><li><a href="global.html#_GetBalance">_GetBalance</a></li><li><a href="global.html#_GetBalance_EtherAndToken">_GetBalance_EtherAndToken</a></li><li><a href="global.html#_GetCurr">_GetCurr</a></li><li><a href="global.html#_GetIdx">_GetIdx</a></li><li><a href="global.html#_GetList">_GetList</a></li><li><a href="global.html#_GetTime">_GetTime</a></li><li><a href="global.html#_GetTimeSec">_GetTimeSec</a></li><li><a href="global.html#_GetWalletObj">_GetWalletObj</a></li><li><a href="global.html#_GetWalletPW">_GetWalletPW</a></li><li><a href="global.html#_isAlnum">_isAlnum</a></li><li><a href="global.html#_PutStorage">_PutStorage</a></li><li><a href="global.html#_SaveWalletWeb3js">_SaveWalletWeb3js</a></li><li><a href="global.html#_SendMsg">_SendMsg</a></li><li><a href="global.html#_sha256">_sha256</a></li><li><a href="global.html#_StorageStruct">_StorageStruct</a></li><li><a href="global.html#_TxBufferPush">_TxBufferPush</a></li><li><a href="global.html#_TxBufferStruct">_TxBufferStruct</a></li><li><a href="global.html#_ValidateAdd">_ValidateAdd</a></li><li><a href="global.html#_ValidatePk">_ValidatePk</a></li><li><a href="global.html#AccountDetail">AccountDetail</a></li><li><a href="global.html#AccountTransition">AccountTransition</a></li><li><a href="global.html#AddOptionsForAccountTransition">AddOptionsForAccountTransition</a></li><li><a href="global.html#AddOptionsForSend">AddOptionsForSend</a></li><li><a href="global.html#AutoLoad_Check">AutoLoad_Check</a></li><li><a href="global.html#AutoLoad_Execute">AutoLoad_Execute</a></li><li><a href="global.html#ChangeName">ChangeName</a></li><li><a href="global.html#ChangeViewWithHTML">ChangeViewWithHTML</a></li><li><a href="global.html#ChangeViewWithSelect">ChangeViewWithSelect</a></li><li><a href="global.html#CheckTxBuffer">CheckTxBuffer</a></li><li><a href="global.html#CreateAccount">CreateAccount</a></li><li><a href="global.html#GetBytecodeAndDeploy">GetBytecodeAndDeploy</a></li><li><a href="global.html#GetHistory">GetHistory</a></li><li><a href="global.html#GoHome">GoHome</a></li><li><a href="global.html#LoadAccount">LoadAccount</a></li><li><a href="global.html#Loading">Loading</a></li><li><a href="global.html#LoadToken">LoadToken</a></li><li><a href="global.html#LoadWallet">LoadWallet</a></li><li><a href="global.html#MakeAndSaveWallet">MakeAndSaveWallet</a></li><li><a href="global.html#readTextFile">readTextFile</a></li><li><a href="global.html#SendFeedback">SendFeedback</a></li><li><a href="global.html#SendSyncMsg">SendSyncMsg</a></li><li><a href="global.html#SendTok">SendTok</a></li><li><a href="global.html#SendTx">SendTx</a></li><li><a href="global.html#SyncView">SyncView</a></li><li><a href="global.html#UnLoading">UnLoading</a></li><li><a href="global.html#UpdateTokenBalance">UpdateTokenBalance</a></li><li><a href="global.html#ValidateSendInfo_Ether">ValidateSendInfo_Ether</a></li><li><a href="global.html#ValidateSendInfo_Token">ValidateSendInfo_Token</a></li><li><a href="global.html#ValidateTokenCreateInfo">ValidateTokenCreateInfo</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 18 2022 17:34:54 GMT+0900 (Korean Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Feb 21 2022 11:04:45 GMT+0900 (Korean Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

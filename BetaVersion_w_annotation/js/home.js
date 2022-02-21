@@ -68,10 +68,15 @@ async function _GetBalance_EtherAndToken(currObj) {
     "<br>* For the actual balance of each token, please visit Etherscan with provided link";
   return res;
 }
-
+/**
+ * Send feedback to developer
+ * @async
+ * @function SendFeedback
+ * @param  {string} msg - content of feedback
+ */
 async function SendFeedback(msg) {
-  // const FeedbackEndpoint = "http://115.85.181.243:8080/api/v1/createtoken";
-  const FeedbackEndpoint = "http://localhost:3000/api/feedback";
+  const FeedbackEndpoint = "http://115.85.181.243:3000/api/feedback";
+  // const FeedbackEndpoint = "http://localhost:3000/api/feedback";
   Loading();
   try {
     const response = await fetch(FeedbackEndpoint, {

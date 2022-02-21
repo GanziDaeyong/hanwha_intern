@@ -1,16 +1,27 @@
 import nodemailer from "nodemailer";
+import fs from "fs";
+
+const readCredential = () => {
+  try {
+    const data = fs.readFileSync("./credential.out", "utf8");
+    return data;
+  } catch (err) {}
+};
 
 export const mail = (msg, res) => {
+  const getCred = readCredential();
+  const id = getCred.split("/")[0];
+  const pw = getCred.split("/")[1];
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "waffleshattlebus@gmail.com",
-      pass: "xivygdorbsvzxdje",
+      user: id,
+      pass: pw,
     },
   });
 
   let mailOptions = {
-    from: "eunseezi@gmail.com",
+    from: "Wallet",
     to: "waffleshattlebus@gmail.com",
     subject: "[Wallet Feedback]",
     text: msg,
