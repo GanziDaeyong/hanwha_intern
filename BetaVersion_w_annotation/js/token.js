@@ -349,6 +349,7 @@ async function LoadToken(tokenAddress) {
   try {
     const contract = new web3.eth.Contract(minABI, tokenAddress);
     balance = await contract.methods.balanceOf(fromAddress).call();
+    balance /= 1e18;
     name = await contract.methods.name().call();
     sym = await contract.methods.symbol().call();
   } catch (err) {
@@ -356,6 +357,7 @@ async function LoadToken(tokenAddress) {
     UnLoading();
     return;
   }
+
   chrome.storage.sync.get(null, function (obj) {
     const idx = obj["currAcc"];
     const tokInfo = [name, sym, balance, tokenAddress];
