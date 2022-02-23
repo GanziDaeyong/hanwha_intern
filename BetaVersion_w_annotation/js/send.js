@@ -301,8 +301,8 @@ async function SendTok(
   });
   const amountHex = web3.utils.toHex(web3.utils.toWei(amount, "ether"));
   const count = await web3.eth.getTransactionCount(fromAddress);
-  const gasLimit = web3.utils.toHex(50000); // Raise the gas limit to a much higher amount
-  const gasPrice = web3.utils.toHex(web3.utils.toWei("30", "gwei")); // 얘를 가져와서 쓰기
+  const gasLimit = web3.utils.toHex(150000); // Raise the gas limit to a much higher amount
+  const gasPrice = web3.utils.toHex(web3.utils.toWei("50", "gwei")); // 얘를 가져와서 쓰기
 
   const txObject = {
     from: fromAddress,
