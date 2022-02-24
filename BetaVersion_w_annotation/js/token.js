@@ -410,12 +410,19 @@ async function AutoLoad_Check() {
   for (let i = 0; i < result["tokens"]["name"].length; i++) {
     let isDuplicate = false;
     for (let eachTokInfo of tokenList) {
-      if (eachTokInfo[3] == result["tokens"]["link"][i]) {
+      const toLow = eachTokInfo[3].toLowerCase();
+      if (
+        eachTokInfo[3] == result["tokens"]["link"][i] ||
+        toLow == result["tokens"]["link"][i]
+      ) {
         isDuplicate = true;
         break;
       }
     }
-    if (isDuplicate) continue;
+    if (isDuplicate) {
+      console.log(result["tokens"]["name"][i] + "Should be skipped");
+      continue;
+    }
     const comb =
       "<br>" +
       result["tokens"]["name"][i] +
