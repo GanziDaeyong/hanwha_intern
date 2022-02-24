@@ -467,7 +467,11 @@ async function AutoLoad_Execute() {
     for (let i = 0; i < result["tokens"]["name"].length; i++) {
       let isDuplicate = false;
       for (let eachTokInfo of tokenList) {
-        if (eachTokInfo[3] == result["tokens"]["link"][i]) {
+        const toLow = eachTokInfo[3].toLowerCase();
+        if (
+          eachTokInfo[3] == result["tokens"]["link"][i] ||
+          toLow == result["tokens"]["link"][i]
+        ) {
           isDuplicate = true;
           break;
         }
