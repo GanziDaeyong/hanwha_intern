@@ -1,4 +1,4 @@
-## Beatrace Crypto-Currency Wallet Project
+## Bitrace Crypto-Currency Wallet Project
 
 ---
 
